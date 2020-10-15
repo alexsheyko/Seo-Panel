@@ -144,8 +144,8 @@ $colCount = ($baseColCount * 3) + 1;
 				foreach ($colList as $colName => $colVal){
 					if ($colName == 'name') continue;
 					
-					$prevRank = isset($listInfo[$colName]) ? $listInfo[$colName] : 0;
-					$currRank = isset($compareReportList[$keywordId][$colName]) ? $compareReportList[$keywordId][$colName] : 0;
+					$prevRank = round(isset($listInfo[$colName]) ? $listInfo[$colName] : 0, 2);
+					$currRank = round(isset($compareReportList[$keywordId][$colName]) ? $compareReportList[$keywordId][$colName] : 0, 2);
 					$rankDiffTxt = "";
 					
 					// check rank difference

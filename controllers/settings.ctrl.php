@@ -175,7 +175,7 @@ class SettingsController extends Controller{
 	# function to check version
 	function checkVersion($return = false) {
 	    $oldVersion = false;
-	    
+
 	    // find latest version of SP
 	    $content = $this->spider->getContent(SP_VERSION_PAGE);	    
 	    $content['page'] = str_replace('Version:', '', $content['page']);
@@ -193,7 +193,7 @@ class SettingsController extends Controller{
 	    } else {
 	        $message = $this->spTextSettings["Your Seo Panel installation is up to date"];
 	    }
-	    
+
 	    // if message needs to be returned
 	    if ($return) {
 	        return [$oldVersion, $message];

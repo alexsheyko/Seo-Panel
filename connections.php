@@ -43,8 +43,13 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 	}
 	
 } else {
-	
-	switch($_GET['action']) {
+
+	$action = '';
+    if (isset($_GET['action'])) {
+        $action = $_GET['action'];
+    }
+
+	switch($action) {
 		
 		case "connect_return":
 			$controller->processConnectionReturn($_GET);
@@ -54,8 +59,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 			$controller->processDisconnection($_GET);
 			break;
 		
-		default:			
-			$controller->listConnections($_GET);
+		default:
+            $controller->listConnections($_GET);
 			break;
 	}
 	

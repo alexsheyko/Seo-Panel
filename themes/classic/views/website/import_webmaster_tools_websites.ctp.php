@@ -1,5 +1,6 @@
 <?php 
 echo showSectionHead($spTextPanel['Import Websites'] . "({$spTextTools['webmaster-tools']})");
+echo $do_sec;
 
 if (!empty($msg)) {
 	?>
@@ -19,7 +20,8 @@ if(!empty($validationMsg)){
 ?>
 
 <form id="projectform">
-<input type="hidden" name="sec" value="importWebmasterTools"/>
+<!--<input type="hidden" name="sec" value="importWebmasterTools"/>-->
+<input type="hidden" name="sec" value="<?php echo $do_sec?>"/>
 <table id="cust_tab">
 	<tr class="form_head">
 		<th width="40%"><?php echo $spTextPanel['Import Websites']; ?></th>

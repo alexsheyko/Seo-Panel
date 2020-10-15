@@ -1,18 +1,18 @@
 <?php 
 echo showSectionHead($spTextPanel["Connections"]);
 
-if ($successMsg) {
+if (isset($successMsg)) {
 	showSuccessMsg($successMsg, false);
 }
 
-if ($errorMsg) {
+if (isset($errorMsg)) {
 	showErrorMsg($errorMsg, false);
 }
 ?>
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="list">
 	<tr class="listHead">
 		<td class="leftid"><?php echo $spText['common']['Id']?></td>		
-		<td><?php echo $spText['label']['Name']?></td>
+		<td><?php echo $spText['common']['Name']?></td>
 		<td><?php echo $spText['common']['Status']?></td>
 		<td class="right"><?php echo $spText['common']['Action']?></td>
 	</tr>

@@ -105,11 +105,11 @@
     		<?php echo $viewContent?>
     	</div>
     </div>
-    
+    <!--
     <div class="container-fluid fixed-bottom <?php echo $siteNavFontClass?> <?php echo $siteFooterBgClass;?> center footer-sp">
     	<?php include_once(SP_VIEWPATH."/common/footer.ctp.php"); ?>
     </div>
-    
+    -->
     <div id="tmp"><form name="tmp" id="tmp"></form></div>
     <div id="dialogContent" style="display:none;"></div>
     <?php

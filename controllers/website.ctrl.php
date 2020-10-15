@@ -243,12 +243,18 @@ class WebsiteController extends Controller{
 
 	function __checkName($name, $userId){
 		
-		$sql = "select id from websites where name='".addslashes($name)."' and user_id=$userId";
-		$listInfo = $this->db->select($sql, true);
-		return empty($listInfo['id']) ? false :  $listInfo['id'];
+		//$sql = "select id from websites where name='".addslashes($name)."' and user_id=$userId";
+		//$listInfo = $this->db->select($sql, true);
+		//return empty($listInfo['id']) ? false :  $listInfo['id'];
+
+		//avprog.ru	http://avprog.ru/
+		//avprog.ru	https://avprog.ru/
+		return false;
 	}
 
-	function __checkWebsiteUrl($url, $websiteId=0){		
+	function __checkWebsiteUrl($url, $websiteId=0){
+
+
 		$sql = "select id from websites where url='".addslashes($url)."'";
 		$sql .= $websiteId ? " and id!=$websiteId" : "";
 		$listInfo = $this->db->select($sql, true);
@@ -271,7 +277,10 @@ class WebsiteController extends Controller{
 		$errMsg['url'] = formatErrorMsg($this->validate->checkBlank($listInfo['url']));
 		$listInfo['url'] = addHttpToUrl($listInfo['url']);
 		$statusVal = isset($listInfo['status']) ? intval($listInfo['status']) : 1;
-		
+
+		$ya_host_id = isset($listInfo['ya_host_id']) ? $listInfo['ya_host_id'] : '';
+		$ya_mirror_id = isset($listInfo['ya_mirror_id']) ? $listInfo['ya_mirror_id'] : '';
+
 		// verify the limit for the user
 		if (!$this->validateWebsiteCount($userId)) {
 			$this->set('validationMsg', $this->spTextWeb["Your website count already reached the limit"]);
@@ -286,10 +295,19 @@ class WebsiteController extends Controller{
 			        $listInfo['title'] = substr($listInfo['title'], 0, 100);
 			        $listInfo['description'] = substr($listInfo['description'], 0, 500);
 			        $listInfo['keywords'] = substr($listInfo['keywords'], 0, 500);
-    				$sql = "insert into websites(name,url,title,description,analytics_view_id,keywords,user_id,status)
-    				values('".addslashes($listInfo['name'])."','".addslashes($listInfo['url'])."','".
-    				addslashes($listInfo['title'])."','".addslashes($listInfo['description'])."', '".addslashes($listInfo['analytics_view_id'])."', '".
-    				addslashes($listInfo['keywords'])."', $userId, $statusVal)";
+
+    				$sql = "insert into websites(name,url,title,description,analytics_view_id,
+    				                             keywords, user_id, status,
+    				                             ya_host_id, ya_mirror_id)
+    				values('".addslashes($listInfo['name'])."','"
+    				         .addslashes($listInfo['url'])."','"
+    				         .addslashes($listInfo['title'])."','"
+    				         .addslashes($listInfo['description'])."', '"
+    				         .addslashes($listInfo['analytics_view_id'])."', '"
+    				         .addslashes($listInfo['keywords'])."', $userId, $statusVal,'"
+    				         .addslashes($ya_host_id)."','"
+    				         .addslashes($ya_mirror_id)."' "
+    				         .")";
     				$this->db->query($sql);
     				
     				// if api call
@@ -301,7 +319,7 @@ class WebsiteController extends Controller{
     				}
     				
 			    } else {
-			        $errMsg['url'] = formatErrorMsg($this->spTextWeb['Website already exist']);
+			        $errMsg['url'] = formatErrorMsg($this->spTextWeb['Website already exist.']);
 			    }
 			}else{
 				$errMsg['name'] = formatErrorMsg($this->spTextWeb['Website already exist']);
@@ -367,7 +385,10 @@ class WebsiteController extends Controller{
 		$errMsg['url'] = formatErrorMsg($this->validate->checkBlank($listInfo['url']));
 		$listInfo['url'] = addHttpToUrl($listInfo['url']);
 		$statusVal = isset($listInfo['status']) ? "status = " . intval($listInfo['status']) ."," : "";		
-		
+
+        $ya_host_id = isset($listInfo['ya_host_id']) ? $listInfo['ya_host_id'] : '';
+		$ya_mirror_id = isset($listInfo['ya_mirror_id']) ? $listInfo['ya_mirror_id'] : '';
+
 		// check limit
 		if(!$this->validate->flagErr && !empty($listInfo['user_id'])){
 			$websiteInfo = $this->__getWebsiteInfo($listInfo['id']);
@@ -411,7 +432,9 @@ class WebsiteController extends Controller{
 						description = '".addslashes($listInfo['description'])."',
 						analytics_view_id = '".addslashes($listInfo['analytics_view_id'])."',
 						$statusVal
-						keywords = '".addslashes($listInfo['keywords'])."'
+						keywords = '".addslashes($listInfo['keywords'])."',
+						ya_host_id = '".addslashes($ya_host_id)."',
+						ya_mirror_id = '".addslashes($ya_mirror_id)."'
 						where id={$listInfo['id']}";
 				$this->db->query($sql);
 				
@@ -678,7 +701,7 @@ class WebsiteController extends Controller{
 			
 	}
 	
-	function showimportWebmasterToolsWebsites() {
+	function showimportWebmasterToolsWebsites($info) {
 		
 		$userId = isLoggedIn();
 		$this->set('spTextTools', $this->getLanguageTexts('seotools', $_SESSION['lang_code']));
@@ -699,7 +722,10 @@ class WebsiteController extends Controller{
 		if (!isAdmin()) {
 			$this->setValidationMessageForLimit($userId);
 		}
-		
+
+		//$this->set('do_sec', 'importWebmasterTools');
+		$this->set('do_sec', $info['sec']);
+
 		$this->render('website/import_webmaster_tools_websites');
 	}
 	
@@ -727,15 +753,26 @@ class WebsiteController extends Controller{
 			if ($websiteInfo->permissionLevel != 'siteOwner') continue;
 				
 			// chekc whether website existing or not
-			if (!$this->__checkWebsiteUrl($websiteInfo->siteUrl) && !$this->__checkWebsiteUrl(Spider::removeTrailingSlash($websiteInfo->siteUrl))) {
+			if (!$this->__checkWebsiteUrl($websiteInfo->siteUrl) &&
+			    !$this->__checkWebsiteUrl(Spider::removeTrailingSlash($websiteInfo->siteUrl))) {
+
 				$websiteName = formatUrl($websiteInfo->siteUrl, false);
 				$websiteName = Spider::removeTrailingSlash($websiteName);
+				//asv
+				$status = 1;
+				$url = $websiteInfo->siteUrl;
+				if (substr($websiteName, 0, 10) == 'sc-domain:') {
+				    $status = 0;
+				    $url = str_replace("sc-domain:", "", $url);
+				}
+				//
+				$listInfo = [];
 				$listInfo['name'] = $websiteName;
-				$listInfo['url'] = $websiteInfo->siteUrl;
+				$listInfo['url'] = $url; //$websiteInfo->siteUrl;
 				$listInfo['title'] = $websiteName;
 				$listInfo['description'] = $websiteName;
 				$listInfo['keywords'] = $websiteName;
-				$listInfo['status'] = 1;
+				$listInfo['status'] = $status;
 				$listInfo['userid'] = $userId;
 				$return = $this->createWebsite($listInfo, true);
 	
@@ -939,6 +976,102 @@ class WebsiteController extends Controller{
 		$this->listSitemap(array('website_id' => $sitemapInfo['website_id']));
 	
 	}
+
+	//asv
+
+    function importWebmasterYandexWebsites($info) {
+		$userId = isAdmin() ? intval($info['userid']) : isLoggedIn();
+		$limitReached = false;
+		$importList = array();
+
+		// verify the limit for the user
+		if (!$this->validateWebsiteCount($userId)) {
+			showErrorMsg($this->spTextWeb["Your website count already reached the limit"]);
+		}
+
+		$gapiCtrler = new WebYandexController();
+		$result = $gapiCtrler->getAllSites($userId);
+
+		// check whether error occured while api call
+		if (!$result['status']) {
+			showErrorMsg($result['msg']);
+		}
+
+		// loop through website list
+		foreach ($result['resultList'] as $websiteInfo) {
+
+			//if ($websiteInfo->permissionLevel != 'siteOwner') continue;
+
+			// check whether website existing or not
+
+            if (isset($websiteInfo->unicode_host_url)){
+                $websiteName = formatUrl($websiteInfo->unicode_host_url, false);
+            }else{
+                $websiteName = formatUrl($websiteInfo->ascii_host_url, false);
+            }
+            $websiteName = Spider::removeTrailingSlash($websiteName);
+            //asv
+            $status = 1;
+            $url = $websiteInfo->ascii_host_url;
+            if ($websiteInfo->verified === false) {
+                $status = 0;
+            }
+            //
+            $listInfo = [];
+            $listInfo['name'] = $websiteName;
+            $listInfo['url'] = $url;
+            $listInfo['title'] = $websiteName;
+            $listInfo['description'] = $websiteName;
+            $listInfo['keywords'] = $websiteName;
+            $listInfo['status'] = $status;
+            $listInfo['userid'] = $userId;
+            $listInfo['ya_host_id'] = $websiteInfo->host_id;
+
+            if (isset($websiteInfo->main_mirror) && isset($websiteInfo->main_mirror->host_id) ){
+                $listInfo['ya_mirror_id'] = $websiteInfo->main_mirror->host_id;
+            }
+
+            if (!$this->__checkWebsiteUrl($websiteInfo->ascii_host_url) &&
+			    !$this->__checkWebsiteUrl(Spider::removeTrailingSlash($websiteInfo->ascii_host_url))) {
+
+				$return = $this->createWebsite($listInfo, true);
+
+				// if success, check of number of websites can be added
+				if ($return[0] == 'success') {
+					$importList[] = $websiteInfo->ascii_host_url;
+
+					// if reached website add limit
+					if (!$this->validateWebsiteCount($userId)) {
+						$limitReached = true;
+						break;
+					}
+				}else{
+				    $a=1;
+				    //showErrorMsg($websiteInfo->ascii_host_url, false);
+				} //success
+
+            }else{
+                $listInfo['id'] = $this->__checkWebsiteUrl($websiteInfo->ascii_host_url);
+                if (!$listInfo['id']) {
+                    $listInfo['id'] = $this->__checkWebsiteUrl(Spider::removeTrailingSlash($websiteInfo->ascii_host_url));
+                }
+                $return = $this->updateWebsite($listInfo, true);
+
+            }
+
+		} //foreach
+
+		// show results
+		showSuccessMsg("<b>".$this->spTextWeb["Successfully imported following websites"]."</b>:", false);
+		foreach ($importList as $url) showSuccessMsg($url, false);
+
+		// if website add limit reached
+		if ($limitReached) {
+			showErrorMsg($this->spTextWeb["Your website count already reached the limit"]);
+		}
+
+	}
+
 	
 		
 }

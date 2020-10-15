@@ -34,6 +34,20 @@ if ($category == "moz") {
 		</a>
 	</div>
 	<?php
+} else if ($category == "yandex") {
+	?>
+    <div id="topnewsbox">
+		<a class="bold_link" href="https://yandex.ru/dev/webmaster/doc/dg/concepts/About.html/" target="_blank">
+			<?php echo $spTextSettings['click-to-get-google-api-key']; ?> &gt;&gt;
+		</a>
+	</div>
+    <div id="topnewsbox" style="margin-bottom: 20px;">
+		<a class="bold_link" href="https://oauth.yandex.ru/client/new" target="_blank">
+			<?php echo $spTextSettings['click-to-get-google-api-client-id']; ?> &gt;&gt;
+		</a>
+	</div>
+
+	<?php
 }
 ?>
 <form id="updateSettings">
@@ -74,7 +88,8 @@ if ($category == "moz") {
 		// sp demo settings
 		$demoCheckArr = array(
 			'SP_API_KEY', 'API_SECRET', 'SP_SMTP_PASSWORD', 'SP_MOZ_API_ACCESS_ID', 'SP_MOZ_API_SECRET', 'SP_GOOGLE_API_KEY',
-			'SP_GOOGLE_API_CLIENT_ID', 'SP_GOOGLE_API_CLIENT_SECRET', 'SP_GOOGLE_ANALYTICS_TRACK_CODE'
+			'SP_GOOGLE_API_CLIENT_ID', 'SP_GOOGLE_API_CLIENT_SECRET', 'SP_GOOGLE_ANALYTICS_TRACK_CODE',
+			'SP_YANDEX_API_CLIENT_ID', 'SP_YANDEX_API_CLIENT_SECRET', 'SP_YANDEX_ANALYTICS_TRACK_CODE'
 		);
 		if (SP_DEMO && in_array($listInfo['set_name'], $demoCheckArr)) {
 			$listInfo['set_val'] = "********";
@@ -166,6 +181,14 @@ if ($category == "moz") {
 		<tr class="white_row">
 			<td class="td_left_col"><?php echo $spTextSettings["Authorised redirect URI"]?></td>
 			<td class="td_right_col"><?php echo SP_WEBPATH . "/admin-panel.php?sec=connections&action=connect_return&category=google"?></td>
+		</tr>
+		<?php
+	}
+	if ($category == "yandex") {
+		?>
+		<tr class="white_row">
+			<td class="td_left_col"><?php echo $spTextSettings["Authorised redirect URI"]?></td>
+			<td class="td_right_col"><?php echo SP_WEBPATH . "/admin-panel.php?sec=connections&action=connect_return&category=yandex"?></td>
 		</tr>
 		<?php
 	}

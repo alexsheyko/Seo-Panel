@@ -1473,8 +1473,8 @@ class ReportController extends Controller {
     		        $genReport = (date('d') == 1) ? true : false;
     		    } else {		    
         			$nextGenTime = $lastGeneratedTime + ( $repSetInfo['report_interval'] * 86400);
-        			$genReport = (mktime() > $nextGenTime) ? true : false;
-    		    }    
+        			$genReport = (time() > $nextGenTime) ? true : false;
+    		    }
 		    }		    
 		}
 		$repSetInfo['generate_report'] = $genReport; 

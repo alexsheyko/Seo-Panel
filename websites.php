@@ -26,6 +26,9 @@ include_once(SP_CTRLPATH."/website.ctrl.php");
 include_once(SP_CTRLPATH."/keyword.ctrl.php");
 include_once(SP_CTRLPATH."/user-type.ctrl.php");
 include_once(SP_CTRLPATH."/webmaster.ctrl.php");
+include_once(SP_CTRLPATH."/webmasteryandex.ctrl.php");
+
+
 $controller = New WebsiteController();
 $controller->view->menu = 'seotools';
 $controller->layout = 'ajax';
@@ -84,7 +87,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 		case "importWebmasterTools":
 			$controller->importWebmasterToolsWebsites($_POST);
 			break;
-		
+
+		case "importWebmasterYandex":
+			$controller->importWebmasterYandexWebsites($_POST);
+			break;
+
 		case "submitSitemap":
 		    if (SP_DEMO) return false;
 			$controller->submitSitemap($_POST);
@@ -133,7 +140,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 		case "importWebmasterTools":
 			$controller->showimportWebmasterToolsWebsites($_GET);
 			break;
-		
+		case "importWebmasterYandex":
+			$controller->showimportWebmasterToolsWebsites($_GET);
+			break;
+
 		case "crawlmeta":
 		    $keyInput = empty($_GET['keyinput']) ? "" : $_GET['keyinput']; 
 			$controller->crawlMetaData(urldecode($_GET['url']), $keyInput);

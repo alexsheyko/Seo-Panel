@@ -71,6 +71,7 @@ class MysqliHelper extends Database{
 		mysqli_free_result($res);
 		
 		if ($fetchFirst){
+		    $returnArr[] = array(); // append  empty
 			return $returnArr[0];
 		}
 		

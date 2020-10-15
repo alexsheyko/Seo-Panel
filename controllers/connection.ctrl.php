@@ -21,12 +21,14 @@
  ***************************************************************************/
 
 include_once(SP_CTRLPATH . "/googleapi.ctrl.php");
+include_once(SP_CTRLPATH . "/yandexapi.ctrl.php");
 
 # class defines all connection functions
 class ConnectionController extends Controller {
 	
 	var $sourceList =  array(
 		'google' => 'GoogleAPIController',
+		'yandex' => 'YandexWebAPIController',
 	);
 	
 		
@@ -38,10 +40,13 @@ class ConnectionController extends Controller {
 		$userId = isLoggedIn();
 		$sourceList = array();
 		$userTokenCtrler = new UserTokenController();
-		
+
 		// loop through the list
 		foreach ($this->sourceList as $name => $class ) {
-			
+
+			$status = false;
+			$authUrlInfo = array('auth_url' => '#');
+
 			// check connection status
 			$tokenInfo = $userTokenCtrler->getUserToken($userId, $name);
 			

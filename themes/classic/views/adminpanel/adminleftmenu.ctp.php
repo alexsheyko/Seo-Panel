@@ -43,6 +43,11 @@ foreach($menuList as $i => $menuInfo){
 					</a>
 				</li>
 				<li>
+					<a href="javascript:void(0);" onclick="scriptDoLoad('websites.php', 'content', 'sec=importWebmasterYandex')">
+						<?php echo $spTextPanel['Import Websites']?>(<?php echo $spTextTools['webmaster-yandex']?>)
+					</a>
+				</li>
+				<li>
 					<a href="javascript:void(0);" onclick="scriptDoLoad('websites.php', 'content', 'sec=listSitemap')">
 						<?php echo $spTextPanel['Sitemaps']?>(<?php echo $spTextTools['webmaster-tools']?>)
 					</a>
@@ -179,6 +184,7 @@ foreach($menuList as $i => $menuInfo){
 				<li><a href="javascript:void(0);" onclick="scriptDoLoad('settings.php', 'content')"><?php echo $spTextPanel['System Settings']?></a></li>
 				<li><a href="javascript:void(0);" onclick="scriptDoLoad('settings.php?category=moz', 'content')"><?php echo $spTextPanel['MOZ Settings']?></a></li>
 				<li><a href="javascript:void(0);" onclick="scriptDoLoad('settings.php?category=google', 'content')"><?php echo $spTextPanel['Google Settings']?></a></li>
+				<li><a href="javascript:void(0);" onclick="scriptDoLoad('settings.php?category=yandex', 'content')"><?php echo $spTextPanel['Yandex Settings']?></a></li>
 				<li><a href="javascript:void(0);" onclick="scriptDoLoad('settings.php?category=mail', 'content')"><?php echo $spTextPanel['Mail Settings']?></a></li>
 				<li><a href="javascript:void(0);" onclick="scriptDoLoad('settings.php?sec=test_email', 'content')"><?php echo $spTextPanel['Test Email Settings']?></a></li>
 			</ul>

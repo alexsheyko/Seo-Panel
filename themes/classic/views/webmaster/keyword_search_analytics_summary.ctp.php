@@ -148,6 +148,7 @@ $colCount = ($baseColCount * 3) + 2;
 					if ($colName == 'name') continue;
 					
 					$currRank = isset($listInfo[$colName]) ? $listInfo[$colName] : 0;
+                    $currRank = round($currRank, 2); //asv
 					$prevRank = isset($compareReportList[$keywordId][$colName]) ? $compareReportList[$keywordId][$colName] : 0;
 					$rankDiffTxt = "";
 					
@@ -164,8 +165,8 @@ $colCount = ($baseColCount * 3) + 2;
 						$rankDiffTxt = "";
 					}
 
-					$prevRankLink = scriptAJAXLinkHrefDialog('webmaster-tools.php', 'content', $scriptLink . "&sec=viewKeywordSearchReports", $prevRank);
-					$currRankLink = scriptAJAXLinkHrefDialog('webmaster-tools.php', 'content', $scriptLink . "&sec=viewKeywordSearchReports", $currRank);
+					$prevRankLink = scriptAJAXLinkHrefDialog('webmaster-tools.php', 'content', $scriptLink . "&sec=viewKeywordSearchReports&2", $prevRank);
+					$currRankLink = scriptAJAXLinkHrefDialog('webmaster-tools.php', 'content', $scriptLink . "&sec=viewKeywordSearchReports&2", $currRank);
 					$graphLink = scriptAJAXLinkHrefDialog('webmaster-tools.php', 'content', $scriptLink . "&sec=viewKeywordSearchGraphReports&attr_type=$colName", '&nbsp;', 'graphicon');
 					
 					// if pdf report remove links

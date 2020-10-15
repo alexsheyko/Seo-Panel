@@ -40,7 +40,7 @@ class Paging {
 		}
 		$pages_required = ceil($num_rows/$this->per_page);
 		if(!empty($this->div_class)) { $div_class=' class="'.$this->div_class.'"'; }
-		$tmp .= "<div$div_class>"; ": "; ": ";
+		$tmp .= "<div$div_class><ul class=pagination>"; ": "; ": ";
 		$page_line="";
 		$start_page=$this->current_page-4;
 		if($start_page<1) { $start_page=1; }
@@ -59,7 +59,7 @@ class Paging {
 		if($start_page>1) {
 			if(!empty($this->action_path)) {
 				$this->scriptArgs = $scriptArgs . "&pageno=1";
-				$page_line .= $this->createPagingLink('&laquo;', '', '&nbsp;&nbsp;');				
+				$page_line .= $this->createPagingLink('&laquo;', '', '');
 			}
 		}
 
@@ -69,32 +69,35 @@ class Paging {
 			if($this->current_page!=$i) {
 				if(!empty($this->action_path)) {					
 					$this->scriptArgs = $scriptArgs . "&pageno=$i";
-					$page_line .= $this->createPagingLink($i, '', '&nbsp; | &nbsp;');
+					$page_line .= $this->createPagingLink($i, '', '');
 				}
 			} else {
-				$page_line.='<b>'.$i.'</b>&nbsp; | &nbsp;';
+				//$page_line.='<b>'.$i.'</b>&nbsp; | &nbsp;';
+				$page_line .= $this->createPagingLink($i, '', '', 'active');
 			}
 
 		}
-		$page_line=substr($page_line,0,strlen($page_line)-15);
+		//$page_line=substr($page_line,0,strlen($page_line)-15);
 
 		# arrow right
 		if($end_page<$pages_required) {
 			if(!empty($this->action_path)) {
 				$this->scriptArgs = $scriptArgs . "&pageno=$pages_required";
-				$page_line .= $this->createPagingLink('&raquo;', '&nbsp;&nbsp;', '');
+				$page_line .= $this->createPagingLink('&raquo;', '', '');
 			}
 		}
 		$tmp .= $page_line;
-		$tmp .= '</div><div style="clear:both;"></div>';
+		$tmp .= '</ul></div><div style="clear:both;"></div>';
 		return $tmp;
 	}
 
 	# func to create paging link
-	function createPagingLink($linkText='', $linkBefore='', $linkAfter=''){
+	function createPagingLink($linkText='', $linkBefore='', $linkAfter='', $li_class=''){
 				
-		if(!empty($this->link_class)) { $linkClass=' class="'.$this->link_class.'"'; }
-		
+		//if(!empty($this->link_class)) { $linkClass=' class="'.$this->link_class.'"'; }
+		$linkClass=' class="page-link"';
+		if(!empty($this->link_class)) { $linkClass=' class="page-link '.$this->link_class.'"'; }
+
 		if ($this->scriptFunction == 'link') {
 			$link = "$linkBefore <a href='$this->scriptPath$this->scriptArgs' $linkClass>$linkText</a>$linkAfter";
 		} elseif($this->scriptFunction == 'scriptDoLoadPost') {
@@ -102,6 +105,7 @@ class Paging {
 		}else{			
 			$link = "$linkBefore<a href='javascript:void(0);' $linkClass onclick=\"$this->scriptFunction('$this->scriptPath', '$this->showArea', '$this->scriptArgs')\">$linkText</a>$linkAfter";
 		}
+		$link = "<li class=\"page-item ".$li_class."\">".$link."</li>";
 		return $link;		
 	}
 	

@@ -6,7 +6,7 @@
 
 DROP TABLE IF EXISTS `languages`;
 CREATE TABLE `languages` (
-  `lang_code` varchar(8) CHARACTER SET latin1 NOT NULL,
+  `lang_code` varchar(8) CHARACTER SET latin1 NOT NULL	SP_GOOGLE,
   `lang_name` varchar(24) COLLATE utf8_unicode_ci DEFAULT NULL,
   `lang_show` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
   `RTL` tinyint(1) NOT NULL DEFAULT '0',

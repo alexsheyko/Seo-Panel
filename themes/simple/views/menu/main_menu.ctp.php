@@ -98,11 +98,13 @@ if (!empty($menuInfo['item_list'])) {
 			<i class="fas fa-wrench"></i> <?php echo $spText['common']['Plugins']?>
 		</a>
 	</li>
+	<!--
 	<li class="nav-item <?php echo $supportClass?>">
 		<a class="nav-link" href="<?php echo SP_WEBPATH?>/support.php">
 			<i class="fas fa-question"></i> <?php echo $spText['common']['Support']?>
 		</a>
 	</li>
+	-->
 	
 	<?php if (SP_DEMO) {?>
 		<li class="nav-item">
@@ -116,10 +118,12 @@ if (!empty($menuInfo['item_list'])) {
 			<i class="fas fa-blog"></i> <?php echo $spText['common']['Blog']?></a>
 		</li>
 	<?php } else { ?>
+	    <!--
 		<li class="nav-item">
 			<a class="nav-link" href="<?php echo SP_DONATE_LINK?>" target="_blank" rel="nofollow">
 			<i class="fas fa-donate"></i> <?php echo $spText['common']['Donate']?></a>
 		</li>
+		-->
 	<?php }?>	
 	
 	<?php if (SP_HOSTED_VERSION) {?>

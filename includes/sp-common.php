@@ -209,6 +209,10 @@ function addHttpToUrl($url){
 	if(!stristr($url, 'http://') && !stristr($url, 'https://')){
 		$url = 'http://'.trim($url);
 	}
+
+    // append last slashes
+	$url .= (substr($url, -1) == '/') ? '' : "/";
+
 	return $url;
 }
 
