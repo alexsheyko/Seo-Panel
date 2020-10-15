@@ -6,3 +6,4 @@
 *.sublime-project
 plugins/*
 themes/odbox*
+sp-config.php
