@@ -137,10 +137,6 @@ class Google_Service_Bigquery extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'maxResults' => array(
-                  'location' => 'query',
-                  'type' => 'integer',
-                ),
                 'filter' => array(
                   'location' => 'query',
                   'type' => 'string',
@@ -148,6 +144,10 @@ class Google_Service_Bigquery extends Google_Service
                 'all' => array(
                   'location' => 'query',
                   'type' => 'boolean',
+                ),
+                'maxResults' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
                 ),
                 'pageToken' => array(
                   'location' => 'query',
@@ -246,6 +246,14 @@ class Google_Service_Bigquery extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
+                'maxResults' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+                'startIndex' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
                 'location' => array(
                   'location' => 'query',
                   'type' => 'string',
@@ -254,15 +262,7 @@ class Google_Service_Bigquery extends Google_Service
                   'location' => 'query',
                   'type' => 'integer',
                 ),
-                'maxResults' => array(
-                  'location' => 'query',
-                  'type' => 'integer',
-                ),
                 'pageToken' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'startIndex' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -286,23 +286,7 @@ class Google_Service_Bigquery extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'maxCreationTime' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
                 'pageToken' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'maxResults' => array(
-                  'location' => 'query',
-                  'type' => 'integer',
-                ),
-                'allUsers' => array(
-                  'location' => 'query',
-                  'type' => 'boolean',
-                ),
-                'minCreationTime' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -310,12 +294,28 @@ class Google_Service_Bigquery extends Google_Service
                   'location' => 'query',
                   'type' => 'string',
                 ),
+                'minCreationTime' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'maxResults' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
                 'stateFilter' => array(
                   'location' => 'query',
                   'type' => 'string',
                   'repeated' => true,
                 ),
                 'parentJobId' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'allUsers' => array(
+                  'location' => 'query',
+                  'type' => 'boolean',
+                ),
+                'maxCreationTime' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -539,14 +539,6 @@ class Google_Service_Bigquery extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'maxResults' => array(
-                  'location' => 'query',
-                  'type' => 'integer',
-                ),
-                'filter' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
                 'readMask' => array(
                   'location' => 'query',
                   'type' => 'string',
@@ -554,6 +546,14 @@ class Google_Service_Bigquery extends Google_Service
                 'pageToken' => array(
                   'location' => 'query',
                   'type' => 'string',
+                ),
+                'filter' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'maxResults' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
                 ),
               ),
             ),'update' => array(
@@ -625,7 +625,7 @@ class Google_Service_Bigquery extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'startIndex' => array(
+                'pageToken' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -633,13 +633,13 @@ class Google_Service_Bigquery extends Google_Service
                   'location' => 'query',
                   'type' => 'string',
                 ),
+                'startIndex' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
                 'maxResults' => array(
                   'location' => 'query',
                   'type' => 'integer',
-                ),
-                'pageToken' => array(
-                  'location' => 'query',
-                  'type' => 'string',
                 ),
               ),
             ),

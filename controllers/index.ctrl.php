@@ -1,8 +1,8 @@
 <?php
 
 /***************************************************************************
- *   Copyright (C) 2009-2011 by Geo Varghese(www.seopanel.in)  	           *
- *   sendtogeo@gmail.com   												   *
+ *   Copyright (C) 2009-2011 by Geo Varghese(www.seopanel.in)               *
+ *   sendtogeo@gmail.com                                                   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,30 +21,35 @@
  ***************************************************************************/
 
 # class defines all index controller functions
-class IndexController extends Controller{
-	
-	# index function
-	function index($searchInfo=''){		
-		
-		$spTextHome = $this->getLanguageTexts('home', $_SESSION['lang_code']);
-		$this->set('spTextHome', $spTextHome);
-		if(isLoggedIn()){
-			$this->render('user/userhome');
-		}else{
-			$this->render('home');
-		}
-	}
-	
-	# show login form
-	function showLoginForm(){		
-		$this->render('common/login');
-	}
-	
-	# function to show support page
-	function showSupport() {
-		$this->set('spTextSupport', $this->getLanguageTexts('support', $_SESSION['lang_code']));
-		$this->render('support');
-	}
-	
+class IndexController extends Controller
+{
+
+    # index function
+    function index($searchInfo = '')
+    {
+
+        $spTextHome = $this->getLanguageTexts('home', $_SESSION['lang_code']);
+        $this->set('spTextHome', $spTextHome);
+        if (isLoggedIn()) {
+            $this->render('user/userhome');
+        } else {
+            $this->render('home');
+        }
+    }
+
+    # show login form
+    function showLoginForm()
+    {
+        $this->render('common/login');
+    }
+
+    # function to show support page
+    function showSupport()
+    {
+        $this->set('spTextSupport', $this->getLanguageTexts('support', $_SESSION['lang_code']));
+        $this->render('support');
+    }
+
 }
+
 ?>

@@ -1,8 +1,8 @@
 <?php
 
 /***************************************************************************
- *   Copyright (C) 2009-2011 by Geo Varghese(www.seopanel.in)  	   *
- *   sendtogeo@gmail.com   												   *
+ *   Copyright (C) 2009-2011 by Geo Varghese(www.seopanel.in)       *
+ *   sendtogeo@gmail.com                                                   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,20 +21,24 @@
  ***************************************************************************/
 
 # class defines all language controller functions
-class CountryController extends Controller{
-	
-	# func to get all countries
-	function __getAllCountries(){
-		$sql = "select * from country order by country_name";
-		$langList = $this->db->select($sql);
-		return $langList;
-	}
-	
-	# func to get country info
-	function __getCountryInfo( $countryCode){
-		$sql = "select * from country where country_code='$countryCode'";
-		$countryInfo = $this->db->select($sql, true);
-		return $countryInfo;
-	}
+class CountryController extends Controller
+{
+
+    # func to get all countries
+    function __getAllCountries()
+    {
+        $sql = "select * from country order by country_name";
+        $langList = $this->db->select($sql);
+        return $langList;
+    }
+
+    # func to get country info
+    function __getCountryInfo($countryCode)
+    {
+        $sql = "select * from country where country_code='$countryCode'";
+        $countryInfo = $this->db->select($sql, true);
+        return $countryInfo;
+    }
 }
+
 ?>

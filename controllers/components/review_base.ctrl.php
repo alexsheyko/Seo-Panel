@@ -1,8 +1,8 @@
 <?php
 
 /***************************************************************************
- *   Copyright (C) 2009-2011 by Geo Varghese(www.seopanel.in)  	           *
- *   sendtogeo@gmail.com   												   *
+ *   Copyright (C) 2009-2011 by Geo Varghese(www.seopanel.in)               *
+ *   sendtogeo@gmail.com                                                   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,34 +21,37 @@
  ***************************************************************************/
 
 # class defines all review base service configurations
-class ReviewBase extends Controller {
-    
+class ReviewBase extends Controller
+{
+
     var $serviceList;
-    
-    function __construct() {
-    	 
-    	$this->serviceList = [
-    		"google" => [
-    			"label" => "Google My Business",
-    			"regex" => [
-    				"reviews" => '/<span>([0-9.,]+) Google reviews<\/span>/is',
-    				"rating" => '/<\/g-popup>.*?aria-label="Rated (\d+\.\d+) out/is',
-    			],
-    		    "url_part" => '?hl=en',
-    		    'example' => ['https://www.google.com/search?q=kfc+Damrak']
-    		],
-    	    "glassdoor" => [
-    	        "label" => "Glassdoor",
-    	        "regex" => [
-    				"reviews" => '/"reviewCount":([0-9.,]+)/is',
-    				"rating" => '/"overallRating":(\d+\.\d+)/is',
-    	        ],
-    		    'example' => ['https://www.glassdoor.com/Overview/Working-at-Google-EI_IE9079.11,17.htm']
-    	    ],
-    	];
-    	
-    	parent::__construct();
+
+    function __construct()
+    {
+
+        $this->serviceList = [
+            "google" => [
+                "label" => "Google My Business",
+                "regex" => [
+                    "reviews" => '/<span>([0-9.,]+) Google reviews<\/span>/is',
+                    "rating" => '/<\/g-popup>.*?aria-label="Rated (\d+\.\d+) out/is',
+                ],
+                "url_part" => '?hl=en',
+                'example' => ['https://www.google.com/search?q=kfc+Damrak']
+            ],
+            "glassdoor" => [
+                "label" => "Glassdoor",
+                "regex" => [
+                    "reviews" => '/"reviewCount":([0-9.,]+)/is',
+                    "rating" => '/"overallRating":(\d+\.\d+)/is',
+                ],
+                'example' => ['https://www.glassdoor.com/Overview/Working-at-Google-EI_IE9079.11,17.htm']
+            ],
+        ];
+
+        parent::__construct();
     }
-    
+
 }
+
 ?>

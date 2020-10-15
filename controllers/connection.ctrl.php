@@ -1,8 +1,8 @@
 <?php
 
 /***************************************************************************
- *   Copyright (C) 2009-2011 by Geo Varghese(www.seopanel.in)  	   *
- *   sendtogeo@gmail.com   												   *
+ *   Copyright (C) 2009-2011 by Geo Varghese(www.seopanel.in)       *
+ *   sendtogeo@gmail.com                                                   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,98 +24,104 @@ include_once(SP_CTRLPATH . "/googleapi.ctrl.php");
 include_once(SP_CTRLPATH . "/yandexapi.ctrl.php");
 
 # class defines all connection functions
-class ConnectionController extends Controller {
-	
-	var $sourceList =  array(
-		'google' => 'GoogleAPIController',
-		'yandex' => 'YandexWebAPIController',
-	);
-	
-		
-	/**
-	 * Function to display connections
-	 */
-	function listConnections($info = ''){
-		
-		$userId = isLoggedIn();
-		$sourceList = array();
-		$userTokenCtrler = new UserTokenController();
+class ConnectionController extends Controller
+{
 
-		// loop through the list
-		foreach ($this->sourceList as $name => $class ) {
+    var $sourceList = array(
+        'google' => 'GoogleAPIController',
+        'yandex' => 'YandexWebAPIController',
+    );
 
-			$status = false;
-			$authUrlInfo = array('auth_url' => '#');
 
-			// check connection status
-			$tokenInfo = $userTokenCtrler->getUserToken($userId, $name);
-			
-			// if token exists
-			if (!empty($tokenInfo['id'])) {
-				$status = true;
-			} else {
-				$status = false;
-				
-				if (SP_DEMO) {
-					$authUrlInfo = array('auth_url' => '#');
-				} else {
-					$sourceCtrler = new $class();
-					$authUrlInfo = $sourceCtrler->getAPIAuthUrl($userId);
-				}
-			}
-			
-			$sourceList[] = array('name' => $name, 'status' => $status, 'auth_url_info' => $authUrlInfo);
-		}
-		
-		$this->set('list', $sourceList);
-		$this->render('myaccount/connection_list');
-	}
-	
-	/*
-	 * process connection return action
-	 */
-	function processConnectionReturn($info) {
-		
-		$userId = isLoggedIn();
-		$className = $this->sourceList[$info['category']];
-		
-		// if class existing for process
-		if (!empty($className)) {
-			$sourceCtrler = new $className();
-			$ret = $sourceCtrler->createUserAuthToken($userId, $info['code']);
-			
-			// if token created successfull
-			if ($ret['status']) {
-				$this->set('successMsg', "Successfully connected to " . $info['category']);
-			} else {
-				$this->set('errorMsg', $ret['msg']);
-			}
-			
-		} else {
-			$this->set('errorMsg', "Class not found to process requested action.");
-		}
-		
-		$this->listConnections();
-		
-	}
-	
-	/*
-	 * process disconnection action
-	 */
-	function processDisconnection($info) {
-		$userId = isLoggedIn();$className = $this->sourceList[$info['category']];
-		
-		// if class existing for process
-		if (class_exists($className)) {
-			$sourceCtrler = new $className();
-			$ret = $sourceCtrler->removeUserAuthToken($userId);
-			$this->set('successMsg', "Successfully disconnected from " . $info['category']);
-		} else {
-			$this->set('errorMsg', "Class not found to process requested action.");
-		}
-		
-		$this->listConnections();
-	}
-	
+    /**
+     * Function to display connections
+     */
+    function listConnections($info = '')
+    {
+
+        $userId = isLoggedIn();
+        $sourceList = array();
+        $userTokenCtrler = new UserTokenController();
+
+        // loop through the list
+        foreach ($this->sourceList as $name => $class) {
+
+            $status = false;
+            $authUrlInfo = array('auth_url' => '#');
+
+            // check connection status
+            $tokenInfo = $userTokenCtrler->getUserToken($userId, $name);
+
+            // if token exists
+            if (!empty($tokenInfo['id'])) {
+                $status = true;
+            } else {
+                $status = false;
+
+                if (SP_DEMO) {
+                    $authUrlInfo = array('auth_url' => '#');
+                } else {
+                    $sourceCtrler = new $class();
+                    $authUrlInfo = $sourceCtrler->getAPIAuthUrl($userId);
+                }
+            }
+
+            $sourceList[] = array('name' => $name, 'status' => $status, 'auth_url_info' => $authUrlInfo);
+        }
+
+        $this->set('list', $sourceList);
+        $this->render('myaccount/connection_list');
+    }
+
+    /*
+     * process connection return action
+     */
+    function processConnectionReturn($info)
+    {
+
+        $userId = isLoggedIn();
+        $className = $this->sourceList[$info['category']];
+
+        // if class existing for process
+        if (!empty($className)) {
+            $sourceCtrler = new $className();
+            $ret = $sourceCtrler->createUserAuthToken($userId, $info['code']);
+
+            // if token created successfull
+            if ($ret['status']) {
+                $this->set('successMsg', "Successfully connected to " . $info['category']);
+            } else {
+                $this->set('errorMsg', $ret['msg']);
+            }
+
+        } else {
+            $this->set('errorMsg', "Class not found to process requested action.");
+        }
+
+        $this->listConnections();
+
+    }
+
+    /*
+     * process disconnection action
+     */
+    function processDisconnection($info)
+    {
+        $userId = isLoggedIn();
+        $className = $this->sourceList[$info['category']];
+
+        // if class existing for process
+        if (class_exists($className)) {
+            $sourceCtrler = new $className();
+            $ret = $sourceCtrler->removeUserAuthToken($userId);
+            $this->set('successMsg', "Successfully disconnected from " . $info['category']);
+        } else {
+            $this->set('errorMsg', "Class not found to process requested action.");
+        }
+
+        $this->listConnections();
+    }
+
 }
+
 ?>
