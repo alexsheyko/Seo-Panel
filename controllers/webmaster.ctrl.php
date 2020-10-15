@@ -54,7 +54,6 @@ class WebMasterController extends GoogleAPIController {
 		$result = array('status' => false);
 		
 		try {
-			
 			$client = $this->getAuthClient($userId);
 			
 			// check whether client created successfully
@@ -296,7 +295,6 @@ class WebMasterController extends GoogleAPIController {
 		// query results from api and verify no error occured
 		$result = $this->getQueryResults($websiteInfo['user_id'], $websiteInfo['url'], $paramList);
 		if ($result['status']) {
-			
 			// loop through the result list
 			foreach ($result['resultList'] as $reportInfo) {
 				$keywordName = $reportInfo['keys'][0];
@@ -313,11 +311,8 @@ class WebMasterController extends GoogleAPIController {
 					'report_date' => $reportDate,
 					'source' => $source,
 				);
-				
 				$this->insertKeywordAnalytics($keywordId, $info);
-				
 			}
-						
 		}
 
 		// if keyword report generated successfully
@@ -328,7 +323,6 @@ class WebMasterController extends GoogleAPIController {
 				'startDate' => $reportDate,
 				'endDate' => $reportDate,
 			);
-				
 			// query results from api and verify no error occured
 			$result = $this->getQueryResults($websiteInfo['user_id'], $websiteInfo['url'], $paramList);
 			
@@ -401,6 +395,7 @@ class WebMasterController extends GoogleAPIController {
 			'average_position|float' => round($reportInfo['average_position'], 2),
 			'report_date' => $resultDate,
 			'source' => $source,
+			'run_date' => date('Y-m-d', time()),
 		);
 		
 		$this->dbHelper->insertRow('website_search_analytics', $dataList);
@@ -408,11 +403,15 @@ class WebMasterController extends GoogleAPIController {
 	}
 
 	# function check whether webmaster reports already saved
-	function isReportsExists($websiteId, $resultDate, $source = "google") {
+	function isReportsExists($websiteId, $resultDate, $source = "google", $today=false) {
 		$websiteId = intval($websiteId);
 		$source = addslashes($source);
 		$resultDate = addslashes($resultDate);
 		$whereCond = "website_id=$websiteId and report_date='$resultDate' and source='$source'";
+		if ($today){
+		    $run_date = date('Y-m-d', time());
+		    $whereCond .= " and run_date='$run_date' ";
+		}
 		$info = $this->dbHelper->getRow("website_search_analytics", $whereCond, "website_id");
 		return !empty($info['website_id']) ? true : false;
 	}

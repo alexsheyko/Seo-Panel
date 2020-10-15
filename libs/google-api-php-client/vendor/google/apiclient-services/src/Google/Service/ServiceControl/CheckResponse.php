@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016 Google Inc.
+ * Copyright 2014 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -15,56 +15,32 @@
  * the License.
  */
 
-class Google_Service_ServiceControl_CheckResponse extends Google_Collection
+class Google_Service_ServiceControl_CheckResponse extends Google_Model
 {
-  protected $collection_key = 'checkErrors';
-  protected $checkErrorsType = 'Google_Service_ServiceControl_CheckError';
-  protected $checkErrorsDataType = 'array';
-  protected $checkInfoType = 'Google_Service_ServiceControl_CheckInfo';
-  protected $checkInfoDataType = '';
-  public $operationId;
-  protected $quotaInfoType = 'Google_Service_ServiceControl_QuotaInfo';
-  protected $quotaInfoDataType = '';
-  public $serviceConfigId;
+  public $headers;
+  protected $statusType = 'Google_Service_ServiceControl_Status';
+  protected $statusDataType = '';
 
-  public function setCheckErrors($checkErrors)
+  public function setHeaders($headers)
   {
-    $this->checkErrors = $checkErrors;
+    $this->headers = $headers;
   }
-  public function getCheckErrors()
+  public function getHeaders()
   {
-    return $this->checkErrors;
+    return $this->headers;
   }
-  public function setCheckInfo(Google_Service_ServiceControl_CheckInfo $checkInfo)
+  /**
+   * @param Google_Service_ServiceControl_Status
+   */
+  public function setStatus(Google_Service_ServiceControl_Status $status)
   {
-    $this->checkInfo = $checkInfo;
+    $this->status = $status;
   }
-  public function getCheckInfo()
+  /**
+   * @return Google_Service_ServiceControl_Status
+   */
+  public function getStatus()
   {
-    return $this->checkInfo;
-  }
-  public function setOperationId($operationId)
-  {
-    $this->operationId = $operationId;
-  }
-  public function getOperationId()
-  {
-    return $this->operationId;
-  }
-  public function setQuotaInfo(Google_Service_ServiceControl_QuotaInfo $quotaInfo)
-  {
-    $this->quotaInfo = $quotaInfo;
-  }
-  public function getQuotaInfo()
-  {
-    return $this->quotaInfo;
-  }
-  public function setServiceConfigId($serviceConfigId)
-  {
-    $this->serviceConfigId = $serviceConfigId;
-  }
-  public function getServiceConfigId()
-  {
-    return $this->serviceConfigId;
+    return $this->status;
   }
 }

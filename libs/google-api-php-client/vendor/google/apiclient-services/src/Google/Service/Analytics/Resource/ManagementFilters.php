@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016 Google Inc.
+ * Copyright 2014 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -40,7 +40,7 @@ class Google_Service_Analytics_Resource_ManagementFilters extends Google_Service
     return $this->call('delete', array($params), "Google_Service_Analytics_Filter");
   }
   /**
-   * Returns a filters to which the user has access. (filters.get)
+   * Returns filters to which the user has access. (filters.get)
    *
    * @param string $accountId Account ID to retrieve filters for.
    * @param string $filterId Filter ID to retrieve filters for.

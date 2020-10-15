@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016 Google Inc.
+ * Copyright 2014 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -19,18 +19,18 @@
  * Service definition for Tasks (v1).
  *
  * <p>
- * Lets you manage your tasks and task lists.</p>
+ * The Google Tasks API lets you manage your tasks and task lists.</p>
  *
  * <p>
  * For more information about this service, see the API
- * <a href="https://developers.google.com/google-apps/tasks/firstapp" target="_blank">Documentation</a>
+ * <a href="" target="_blank">Documentation</a>
  * </p>
  *
  * @author Google, Inc.
  */
 class Google_Service_Tasks extends Google_Service
 {
-  /** Manage your tasks. */
+  /** Create, edit, organize, and delete all your tasks. */
   const TASKS =
       "https://www.googleapis.com/auth/tasks";
   /** View your tasks. */
@@ -43,13 +43,15 @@ class Google_Service_Tasks extends Google_Service
   /**
    * Constructs the internal representation of the Tasks service.
    *
-   * @param Google_Client $client
+   * @param Google_Client $client The client used to deliver requests.
+   * @param string $rootUrl The root URL used for requests to the service.
    */
-  public function __construct(Google_Client $client)
+  public function __construct(Google_Client $client, $rootUrl = null)
   {
     parent::__construct($client);
-    $this->rootUrl = 'https://www.googleapis.com/';
-    $this->servicePath = 'tasks/v1/';
+    $this->rootUrl = $rootUrl ?: 'https://www.googleapis.com/';
+    $this->servicePath = '';
+    $this->batchPath = 'batch/tasks/v1';
     $this->version = 'v1';
     $this->serviceName = 'tasks';
 
@@ -60,7 +62,7 @@ class Google_Service_Tasks extends Google_Service
         array(
           'methods' => array(
             'delete' => array(
-              'path' => 'users/@me/lists/{tasklist}',
+              'path' => 'tasks/v1/users/@me/lists/{tasklist}',
               'httpMethod' => 'DELETE',
               'parameters' => array(
                 'tasklist' => array(
@@ -70,7 +72,7 @@ class Google_Service_Tasks extends Google_Service
                 ),
               ),
             ),'get' => array(
-              'path' => 'users/@me/lists/{tasklist}',
+              'path' => 'tasks/v1/users/@me/lists/{tasklist}',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'tasklist' => array(
@@ -80,16 +82,16 @@ class Google_Service_Tasks extends Google_Service
                 ),
               ),
             ),'insert' => array(
-              'path' => 'users/@me/lists',
+              'path' => 'tasks/v1/users/@me/lists',
               'httpMethod' => 'POST',
               'parameters' => array(),
             ),'list' => array(
-              'path' => 'users/@me/lists',
+              'path' => 'tasks/v1/users/@me/lists',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'maxResults' => array(
                   'location' => 'query',
-                  'type' => 'string',
+                  'type' => 'integer',
                 ),
                 'pageToken' => array(
                   'location' => 'query',
@@ -97,7 +99,7 @@ class Google_Service_Tasks extends Google_Service
                 ),
               ),
             ),'patch' => array(
-              'path' => 'users/@me/lists/{tasklist}',
+              'path' => 'tasks/v1/users/@me/lists/{tasklist}',
               'httpMethod' => 'PATCH',
               'parameters' => array(
                 'tasklist' => array(
@@ -107,7 +109,7 @@ class Google_Service_Tasks extends Google_Service
                 ),
               ),
             ),'update' => array(
-              'path' => 'users/@me/lists/{tasklist}',
+              'path' => 'tasks/v1/users/@me/lists/{tasklist}',
               'httpMethod' => 'PUT',
               'parameters' => array(
                 'tasklist' => array(
@@ -127,7 +129,7 @@ class Google_Service_Tasks extends Google_Service
         array(
           'methods' => array(
             'clear' => array(
-              'path' => 'lists/{tasklist}/clear',
+              'path' => 'tasks/v1/lists/{tasklist}/clear',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'tasklist' => array(
@@ -137,7 +139,7 @@ class Google_Service_Tasks extends Google_Service
                 ),
               ),
             ),'delete' => array(
-              'path' => 'lists/{tasklist}/tasks/{task}',
+              'path' => 'tasks/v1/lists/{tasklist}/tasks/{task}',
               'httpMethod' => 'DELETE',
               'parameters' => array(
                 'tasklist' => array(
@@ -152,7 +154,7 @@ class Google_Service_Tasks extends Google_Service
                 ),
               ),
             ),'get' => array(
-              'path' => 'lists/{tasklist}/tasks/{task}',
+              'path' => 'tasks/v1/lists/{tasklist}/tasks/{task}',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'tasklist' => array(
@@ -167,7 +169,7 @@ class Google_Service_Tasks extends Google_Service
                 ),
               ),
             ),'insert' => array(
-              'path' => 'lists/{tasklist}/tasks',
+              'path' => 'tasks/v1/lists/{tasklist}/tasks',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'tasklist' => array(
@@ -175,17 +177,17 @@ class Google_Service_Tasks extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'parent' => array(
+                'previous' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'previous' => array(
+                'parent' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
               ),
             ),'list' => array(
-              'path' => 'lists/{tasklist}/tasks',
+              'path' => 'tasks/v1/lists/{tasklist}/tasks',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'tasklist' => array(
@@ -193,39 +195,7 @@ class Google_Service_Tasks extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'completedMax' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'completedMin' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'dueMax' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'dueMin' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'maxResults' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'pageToken' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
                 'showCompleted' => array(
-                  'location' => 'query',
-                  'type' => 'boolean',
-                ),
-                'showDeleted' => array(
-                  'location' => 'query',
-                  'type' => 'boolean',
-                ),
-                'showHidden' => array(
                   'location' => 'query',
                   'type' => 'boolean',
                 ),
@@ -233,9 +203,41 @@ class Google_Service_Tasks extends Google_Service
                   'location' => 'query',
                   'type' => 'string',
                 ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'completedMax' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'dueMin' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'showDeleted' => array(
+                  'location' => 'query',
+                  'type' => 'boolean',
+                ),
+                'completedMin' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'showHidden' => array(
+                  'location' => 'query',
+                  'type' => 'boolean',
+                ),
+                'dueMax' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'maxResults' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
               ),
             ),'move' => array(
-              'path' => 'lists/{tasklist}/tasks/{task}/move',
+              'path' => 'tasks/v1/lists/{tasklist}/tasks/{task}/move',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'tasklist' => array(
@@ -248,17 +250,17 @@ class Google_Service_Tasks extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'parent' => array(
+                'previous' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'previous' => array(
+                'parent' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
               ),
             ),'patch' => array(
-              'path' => 'lists/{tasklist}/tasks/{task}',
+              'path' => 'tasks/v1/lists/{tasklist}/tasks/{task}',
               'httpMethod' => 'PATCH',
               'parameters' => array(
                 'tasklist' => array(
@@ -273,7 +275,7 @@ class Google_Service_Tasks extends Google_Service
                 ),
               ),
             ),'update' => array(
-              'path' => 'lists/{tasklist}/tasks/{task}',
+              'path' => 'tasks/v1/lists/{tasklist}/tasks/{task}',
               'httpMethod' => 'PUT',
               'parameters' => array(
                 'tasklist' => array(

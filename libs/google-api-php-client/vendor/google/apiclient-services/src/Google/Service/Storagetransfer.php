@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016 Google Inc.
+ * Copyright 2014 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -24,7 +24,7 @@
  *
  * <p>
  * For more information about this service, see the API
- * <a href="https://cloud.google.com/storage/transfer" target="_blank">Documentation</a>
+ * <a href="https://cloud.google.com/storage-transfer/docs" target="_blank">Documentation</a>
  * </p>
  *
  * @author Google, Inc.
@@ -38,18 +38,19 @@ class Google_Service_Storagetransfer extends Google_Service
   public $googleServiceAccounts;
   public $transferJobs;
   public $transferOperations;
-  public $v1;
   
   /**
    * Constructs the internal representation of the Storagetransfer service.
    *
-   * @param Google_Client $client
+   * @param Google_Client $client The client used to deliver requests.
+   * @param string $rootUrl The root URL used for requests to the service.
    */
-  public function __construct(Google_Client $client)
+  public function __construct(Google_Client $client, $rootUrl = null)
   {
     parent::__construct($client);
-    $this->rootUrl = 'https://storagetransfer.googleapis.com/';
+    $this->rootUrl = $rootUrl ?: 'https://storagetransfer.googleapis.com/';
     $this->servicePath = '';
+    $this->batchPath = 'batch';
     $this->version = 'v1';
     $this->serviceName = 'storagetransfer';
 
@@ -101,15 +102,15 @@ class Google_Service_Storagetransfer extends Google_Service
               'path' => 'v1/transferJobs',
               'httpMethod' => 'GET',
               'parameters' => array(
-                'filter' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
                 'pageSize' => array(
                   'location' => 'query',
                   'type' => 'integer',
                 ),
                 'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'filter' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -144,16 +145,6 @@ class Google_Service_Storagetransfer extends Google_Service
                   'required' => true,
                 ),
               ),
-            ),'delete' => array(
-              'path' => 'v1/{+name}',
-              'httpMethod' => 'DELETE',
-              'parameters' => array(
-                'name' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-              ),
             ),'get' => array(
               'path' => 'v1/{+name}',
               'httpMethod' => 'GET',
@@ -177,13 +168,13 @@ class Google_Service_Storagetransfer extends Google_Service
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'pageSize' => array(
-                  'location' => 'query',
-                  'type' => 'integer',
-                ),
                 'pageToken' => array(
                   'location' => 'query',
                   'type' => 'string',
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
                 ),
               ),
             ),'pause' => array(
@@ -204,25 +195,6 @@ class Google_Service_Storagetransfer extends Google_Service
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
-                ),
-              ),
-            ),
-          )
-        )
-    );
-    $this->v1 = new Google_Service_Storagetransfer_Resource_V1(
-        $this,
-        $this->serviceName,
-        'v1',
-        array(
-          'methods' => array(
-            'getGoogleServiceAccount' => array(
-              'path' => 'v1:getGoogleServiceAccount',
-              'httpMethod' => 'GET',
-              'parameters' => array(
-                'projectId' => array(
-                  'location' => 'query',
-                  'type' => 'string',
                 ),
               ),
             ),

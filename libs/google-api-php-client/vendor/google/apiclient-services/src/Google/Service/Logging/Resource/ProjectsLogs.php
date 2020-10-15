@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016 Google Inc.
+ * Copyright 2014 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -28,7 +28,8 @@ class Google_Service_Logging_Resource_ProjectsLogs extends Google_Service_Resour
   /**
    * Deletes all the log entries in a log. The log reappears if it receives new
    * entries. Log entries written shortly before the delete operation might not be
-   * deleted. (logs.delete)
+   * deleted. Entries received after the delete operation with a timestamp before
+   * the operation will be deleted. (logs.delete)
    *
    * @param string $logName Required. The resource name of the log to delete:
    * "projects/[PROJECT_ID]/logs/[LOG_ID]"

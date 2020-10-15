@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016 Google Inc.
+ * Copyright 2014 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,12 +17,16 @@
 
 class Google_Service_ServiceManagement_MetricDescriptor extends Google_Collection
 {
-  protected $collection_key = 'labels';
+  protected $collection_key = 'monitoredResourceTypes';
   public $description;
   public $displayName;
   protected $labelsType = 'Google_Service_ServiceManagement_LabelDescriptor';
   protected $labelsDataType = 'array';
+  public $launchStage;
+  protected $metadataType = 'Google_Service_ServiceManagement_MetricDescriptorMetadata';
+  protected $metadataDataType = '';
   public $metricKind;
+  public $monitoredResourceTypes;
   public $name;
   public $type;
   public $unit;
@@ -44,13 +48,41 @@ class Google_Service_ServiceManagement_MetricDescriptor extends Google_Collectio
   {
     return $this->displayName;
   }
+  /**
+   * @param Google_Service_ServiceManagement_LabelDescriptor
+   */
   public function setLabels($labels)
   {
     $this->labels = $labels;
   }
+  /**
+   * @return Google_Service_ServiceManagement_LabelDescriptor
+   */
   public function getLabels()
   {
     return $this->labels;
+  }
+  public function setLaunchStage($launchStage)
+  {
+    $this->launchStage = $launchStage;
+  }
+  public function getLaunchStage()
+  {
+    return $this->launchStage;
+  }
+  /**
+   * @param Google_Service_ServiceManagement_MetricDescriptorMetadata
+   */
+  public function setMetadata(Google_Service_ServiceManagement_MetricDescriptorMetadata $metadata)
+  {
+    $this->metadata = $metadata;
+  }
+  /**
+   * @return Google_Service_ServiceManagement_MetricDescriptorMetadata
+   */
+  public function getMetadata()
+  {
+    return $this->metadata;
   }
   public function setMetricKind($metricKind)
   {
@@ -59,6 +91,14 @@ class Google_Service_ServiceManagement_MetricDescriptor extends Google_Collectio
   public function getMetricKind()
   {
     return $this->metricKind;
+  }
+  public function setMonitoredResourceTypes($monitoredResourceTypes)
+  {
+    $this->monitoredResourceTypes = $monitoredResourceTypes;
+  }
+  public function getMonitoredResourceTypes()
+  {
+    return $this->monitoredResourceTypes;
   }
   public function setName($name)
   {

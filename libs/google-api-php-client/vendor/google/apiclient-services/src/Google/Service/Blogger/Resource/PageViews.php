@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016 Google Inc.
+ * Copyright 2014 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -26,9 +26,9 @@
 class Google_Service_Blogger_Resource_PageViews extends Google_Service_Resource
 {
   /**
-   * Retrieve pageview stats for a Blog. (pageViews.get)
+   * Gets page views by blog id. (pageViews.get)
    *
-   * @param string $blogId The ID of the blog to get.
+   * @param string $blogId
    * @param array $optParams Optional parameters.
    *
    * @opt_param string range

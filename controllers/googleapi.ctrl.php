@@ -110,7 +110,7 @@ class GoogleAPIController extends Controller{
 			
 			// check whether token expired, then refresh existing token
 			if ($client->isAccessTokenExpired()) {
-			
+
 				try {
 					$client->refreshToken($tokenInfo['refresh_token']);
 					$newToken = $client->getAccessToken();
@@ -121,8 +121,10 @@ class GoogleAPIController extends Controller{
 					$newTokenInfo['expires_in'] = $newToken['expires_in'];
 					
 					// comment refresh token update to test the perfomnace
-					/*$newTokenInfo['refresh_token'] = $newToken['refresh_token'];*/
-					
+					//$newTokenInfo['refresh_token'] = $newToken['refresh_token'];
+
+					//return 'isAccessTokenExpired.'.$client->getRefreshToken();
+
 					$this->tokenCtrler->updateUserToken($tokenInfo['id'], $newTokenInfo);
 				} catch (Exception $e) {
 					$err = $e->getMessage();

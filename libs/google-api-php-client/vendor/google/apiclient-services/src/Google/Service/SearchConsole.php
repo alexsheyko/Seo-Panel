@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016 Google Inc.
+ * Copyright 2014 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -19,7 +19,8 @@
  * Service definition for SearchConsole (v1).
  *
  * <p>
- * Provides tools for running validation tests against single URLs</p>
+ * The Search Console API provides access to both Search Console data (verified
+ * users only) and to public information on an URL basis (anyone)</p>
  *
  * <p>
  * For more information about this service, see the API
@@ -37,13 +38,15 @@ class Google_Service_SearchConsole extends Google_Service
   /**
    * Constructs the internal representation of the SearchConsole service.
    *
-   * @param Google_Client $client
+   * @param Google_Client $client The client used to deliver requests.
+   * @param string $rootUrl The root URL used for requests to the service.
    */
-  public function __construct(Google_Client $client)
+  public function __construct(Google_Client $client, $rootUrl = null)
   {
     parent::__construct($client);
-    $this->rootUrl = 'https://searchconsole.googleapis.com/';
+    $this->rootUrl = $rootUrl ?: 'https://searchconsole.googleapis.com/';
     $this->servicePath = '';
+    $this->batchPath = 'batch';
     $this->version = 'v1';
     $this->serviceName = 'searchconsole';
 

@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016 Google Inc.
+ * Copyright 2014 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -23,7 +23,10 @@ class Google_Service_YouTube_SuperChatEventSnippet extends Google_Model
   public $createdAt;
   public $currency;
   public $displayString;
+  public $isSuperStickerEvent;
   public $messageType;
+  protected $superStickerMetadataType = 'Google_Service_YouTube_SuperStickerMetadata';
+  protected $superStickerMetadataDataType = '';
   protected $supporterDetailsType = 'Google_Service_YouTube_ChannelProfileDetails';
   protected $supporterDetailsDataType = '';
 
@@ -75,6 +78,14 @@ class Google_Service_YouTube_SuperChatEventSnippet extends Google_Model
   {
     return $this->displayString;
   }
+  public function setIsSuperStickerEvent($isSuperStickerEvent)
+  {
+    $this->isSuperStickerEvent = $isSuperStickerEvent;
+  }
+  public function getIsSuperStickerEvent()
+  {
+    return $this->isSuperStickerEvent;
+  }
   public function setMessageType($messageType)
   {
     $this->messageType = $messageType;
@@ -83,10 +94,30 @@ class Google_Service_YouTube_SuperChatEventSnippet extends Google_Model
   {
     return $this->messageType;
   }
+  /**
+   * @param Google_Service_YouTube_SuperStickerMetadata
+   */
+  public function setSuperStickerMetadata(Google_Service_YouTube_SuperStickerMetadata $superStickerMetadata)
+  {
+    $this->superStickerMetadata = $superStickerMetadata;
+  }
+  /**
+   * @return Google_Service_YouTube_SuperStickerMetadata
+   */
+  public function getSuperStickerMetadata()
+  {
+    return $this->superStickerMetadata;
+  }
+  /**
+   * @param Google_Service_YouTube_ChannelProfileDetails
+   */
   public function setSupporterDetails(Google_Service_YouTube_ChannelProfileDetails $supporterDetails)
   {
     $this->supporterDetails = $supporterDetails;
   }
+  /**
+   * @return Google_Service_YouTube_ChannelProfileDetails
+   */
   public function getSupporterDetails()
   {
     return $this->supporterDetails;

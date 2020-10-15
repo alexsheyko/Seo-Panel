@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016 Google Inc.
+ * Copyright 2014 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -26,9 +26,9 @@
 class Google_Service_Blogger_Resource_Users extends Google_Service_Resource
 {
   /**
-   * Gets one user by ID. (users.get)
+   * Gets one user by user_id. (users.get)
    *
-   * @param string $userId The ID of the user to get.
+   * @param string $userId
    * @param array $optParams Optional parameters.
    * @return Google_Service_Blogger_User
    */

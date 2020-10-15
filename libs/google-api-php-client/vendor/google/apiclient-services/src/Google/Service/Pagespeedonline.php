@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016 Google Inc.
+ * Copyright 2014 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,7 +16,7 @@
  */
 
 /**
- * Service definition for Pagespeedonline (v2).
+ * Service definition for Pagespeedonline (v5).
  *
  * <p>
  * Analyzes the performance of a web page and provides tailored suggestions to
@@ -24,7 +24,7 @@
  *
  * <p>
  * For more information about this service, see the API
- * <a href="https://developers.google.com/speed/docs/insights/v2/getting-started" target="_blank">Documentation</a>
+ * <a href="https://developers.google.com/speed/docs/insights/v5/get-started" target="_blank">Documentation</a>
  * </p>
  *
  * @author Google, Inc.
@@ -38,13 +38,15 @@ class Google_Service_Pagespeedonline extends Google_Service
   /**
    * Constructs the internal representation of the Pagespeedonline service.
    *
-   * @param Google_Client $client
+   * @param Google_Client $client The client used to deliver requests.
+   * @param string $rootUrl The root URL used for requests to the service.
    */
-  public function __construct(Google_Client $client)
+  public function __construct(Google_Client $client, $rootUrl = null)
   {
     parent::__construct($client);
-    $this->rootUrl = 'https://www.googleapis.com/';
+    $this->rootUrl = $rootUrl ?: 'https://www.googleapis.com/';
     $this->servicePath = 'pagespeedonline/v5/';
+    $this->batchPath = 'batch/pagespeedonline/v5';
     $this->version = 'v5';
     $this->serviceName = 'pagespeedonline';
 
@@ -63,24 +65,24 @@ class Google_Service_Pagespeedonline extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'filter_third_party_resources' => array(
+                'category' => array(
                   'location' => 'query',
-                  'type' => 'boolean',
+                  'type' => 'string',
+                  'repeated' => true,
                 ),
                 'locale' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'rule' => array(
+                'strategy' => array(
                   'location' => 'query',
                   'type' => 'string',
-                  'repeated' => true,
                 ),
-                'screenshot' => array(
+                'utm_campaign' => array(
                   'location' => 'query',
-                  'type' => 'boolean',
+                  'type' => 'string',
                 ),
-                'strategy' => array(
+                'utm_source' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),

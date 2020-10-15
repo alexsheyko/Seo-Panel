@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016 Google Inc.
+ * Copyright 2014 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -21,6 +21,8 @@ class Google_Service_Analytics_Webproperty extends Google_Model
   protected $childLinkType = 'Google_Service_Analytics_WebpropertyChildLink';
   protected $childLinkDataType = '';
   public $created;
+  public $dataRetentionResetOnNewActivity;
+  public $dataRetentionTtl;
   public $defaultProfileId;
   public $id;
   public $industryVertical;
@@ -46,10 +48,16 @@ class Google_Service_Analytics_Webproperty extends Google_Model
   {
     return $this->accountId;
   }
+  /**
+   * @param Google_Service_Analytics_WebpropertyChildLink
+   */
   public function setChildLink(Google_Service_Analytics_WebpropertyChildLink $childLink)
   {
     $this->childLink = $childLink;
   }
+  /**
+   * @return Google_Service_Analytics_WebpropertyChildLink
+   */
   public function getChildLink()
   {
     return $this->childLink;
@@ -61,6 +69,22 @@ class Google_Service_Analytics_Webproperty extends Google_Model
   public function getCreated()
   {
     return $this->created;
+  }
+  public function setDataRetentionResetOnNewActivity($dataRetentionResetOnNewActivity)
+  {
+    $this->dataRetentionResetOnNewActivity = $dataRetentionResetOnNewActivity;
+  }
+  public function getDataRetentionResetOnNewActivity()
+  {
+    return $this->dataRetentionResetOnNewActivity;
+  }
+  public function setDataRetentionTtl($dataRetentionTtl)
+  {
+    $this->dataRetentionTtl = $dataRetentionTtl;
+  }
+  public function getDataRetentionTtl()
+  {
+    return $this->dataRetentionTtl;
   }
   public function setDefaultProfileId($defaultProfileId)
   {
@@ -118,18 +142,30 @@ class Google_Service_Analytics_Webproperty extends Google_Model
   {
     return $this->name;
   }
+  /**
+   * @param Google_Service_Analytics_WebpropertyParentLink
+   */
   public function setParentLink(Google_Service_Analytics_WebpropertyParentLink $parentLink)
   {
     $this->parentLink = $parentLink;
   }
+  /**
+   * @return Google_Service_Analytics_WebpropertyParentLink
+   */
   public function getParentLink()
   {
     return $this->parentLink;
   }
+  /**
+   * @param Google_Service_Analytics_WebpropertyPermissions
+   */
   public function setPermissions(Google_Service_Analytics_WebpropertyPermissions $permissions)
   {
     $this->permissions = $permissions;
   }
+  /**
+   * @return Google_Service_Analytics_WebpropertyPermissions
+   */
   public function getPermissions()
   {
     return $this->permissions;

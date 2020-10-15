@@ -272,7 +272,7 @@ class ANSI
                     case "\x1B[K": // Clear screen from cursor right
                         $this->screen[$this->y] = substr($this->screen[$this->y], 0, $this->x);
 
-                        array_splice($this->attrs[$this->y], $this->x + 1, $this->max_x - $this->x, array_fill($this->x, $this->max_x - $this->x - 1, $this->base_attr_cell));
+                        array_splice($this->attrs[$this->y], $this->x + 1, $this->max_x - $this->x, array_fill($this->x, $this->max_x - ($this->x - 1), $this->base_attr_cell));
                         break;
                     case "\x1B[2K": // Clear entire line
                         $this->screen[$this->y] = str_repeat(' ', $this->x);
@@ -305,6 +305,9 @@ class ANSI
                             case preg_match('#\x1B\[(\d+)D#', $this->ansi, $match): // Move cursor left n lines
                                 $this->old_x = $this->x;
                                 $this->x-= $match[1];
+                                if ($this->x < 0) {
+                                    $this->x = 0;
+                                }
                                 break;
                             case preg_match('#\x1B\[(\d+);(\d+)r#', $this->ansi, $match): // Set top and bottom lines of a window
                                 break;
@@ -416,7 +419,7 @@ class ANSI
 
                     if ($this->x > $this->max_x) {
                         $this->x = 0;
-                        $this->y++;
+                        $this->_newLine();
                     } else {
                         $this->x++;
                     }

@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016 Google Inc.
+ * Copyright 2014 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -15,29 +15,42 @@
  * the License.
  */
 
-class Google_Service_ServiceControl_CheckRequest extends Google_Model
+class Google_Service_ServiceControl_CheckRequest extends Google_Collection
 {
-  protected $operationType = 'Google_Service_ServiceControl_Operation';
-  protected $operationDataType = '';
-  public $requestProjectSettings;
+  protected $collection_key = 'resources';
+  protected $attributesType = 'Google_Service_ServiceControl_AttributeContext';
+  protected $attributesDataType = '';
+  protected $resourcesType = 'Google_Service_ServiceControl_ResourceInfo';
+  protected $resourcesDataType = 'array';
   public $serviceConfigId;
-  public $skipActivationCheck;
 
-  public function setOperation(Google_Service_ServiceControl_Operation $operation)
+  /**
+   * @param Google_Service_ServiceControl_AttributeContext
+   */
+  public function setAttributes(Google_Service_ServiceControl_AttributeContext $attributes)
   {
-    $this->operation = $operation;
+    $this->attributes = $attributes;
   }
-  public function getOperation()
+  /**
+   * @return Google_Service_ServiceControl_AttributeContext
+   */
+  public function getAttributes()
   {
-    return $this->operation;
+    return $this->attributes;
   }
-  public function setRequestProjectSettings($requestProjectSettings)
+  /**
+   * @param Google_Service_ServiceControl_ResourceInfo
+   */
+  public function setResources($resources)
   {
-    $this->requestProjectSettings = $requestProjectSettings;
+    $this->resources = $resources;
   }
-  public function getRequestProjectSettings()
+  /**
+   * @return Google_Service_ServiceControl_ResourceInfo
+   */
+  public function getResources()
   {
-    return $this->requestProjectSettings;
+    return $this->resources;
   }
   public function setServiceConfigId($serviceConfigId)
   {
@@ -46,13 +59,5 @@ class Google_Service_ServiceControl_CheckRequest extends Google_Model
   public function getServiceConfigId()
   {
     return $this->serviceConfigId;
-  }
-  public function setSkipActivationCheck($skipActivationCheck)
-  {
-    $this->skipActivationCheck = $skipActivationCheck;
-  }
-  public function getSkipActivationCheck()
-  {
-    return $this->skipActivationCheck;
   }
 }

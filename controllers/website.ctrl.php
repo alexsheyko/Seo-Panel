@@ -859,7 +859,7 @@ class WebsiteController extends Controller{
 	}
 	
 	// func to import webmaster tools sitemaps
-	function importWebmasterToolsSitemaps($websiteId, $cronJob = false) {
+	function importWebmasterToolsSitemaps($websiteId, $apiCall = false) {
 		$websiteId = intval($websiteId);
 		$webisteInfo = $this->__getWebsiteInfo($websiteId);
 
@@ -899,14 +899,19 @@ class WebsiteController extends Controller{
 				
 			}
 			
-			if ($cronJob) {
+			if ($apiCall) {
 				echo $this->spTextWeb["Successfully sync sitemaps from webmaster tools"] . "<br>\n";
+				return array('success', 'Successfully sync sitemaps from webmaster tools');
 			} else {
 				showSuccessMsg($this->spTextWeb["Successfully sync sitemaps from webmaster tools"], false);
 			}
 			
 		} else {
-			showErrorMsg($result['msg'], false);
+            if ($apiCall) {
+                return array('error', $errMsg);
+            } else {
+                showErrorMsg($result['msg'], false);
+            }
 		}
 		
 	}

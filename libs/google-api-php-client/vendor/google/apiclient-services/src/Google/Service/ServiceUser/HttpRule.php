@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016 Google Inc.
+ * Copyright 2014 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -25,20 +25,22 @@ class Google_Service_ServiceUser_HttpRule extends Google_Collection
   protected $customDataType = '';
   public $delete;
   public $get;
-  protected $mediaDownloadType = 'Google_Service_ServiceUser_MediaDownload';
-  protected $mediaDownloadDataType = '';
-  protected $mediaUploadType = 'Google_Service_ServiceUser_MediaUpload';
-  protected $mediaUploadDataType = '';
   public $patch;
   public $post;
   public $put;
   public $responseBody;
   public $selector;
 
+  /**
+   * @param Google_Service_ServiceUser_HttpRule
+   */
   public function setAdditionalBindings($additionalBindings)
   {
     $this->additionalBindings = $additionalBindings;
   }
+  /**
+   * @return Google_Service_ServiceUser_HttpRule
+   */
   public function getAdditionalBindings()
   {
     return $this->additionalBindings;
@@ -51,10 +53,16 @@ class Google_Service_ServiceUser_HttpRule extends Google_Collection
   {
     return $this->body;
   }
+  /**
+   * @param Google_Service_ServiceUser_CustomHttpPattern
+   */
   public function setCustom(Google_Service_ServiceUser_CustomHttpPattern $custom)
   {
     $this->custom = $custom;
   }
+  /**
+   * @return Google_Service_ServiceUser_CustomHttpPattern
+   */
   public function getCustom()
   {
     return $this->custom;
@@ -74,22 +82,6 @@ class Google_Service_ServiceUser_HttpRule extends Google_Collection
   public function getGet()
   {
     return $this->get;
-  }
-  public function setMediaDownload(Google_Service_ServiceUser_MediaDownload $mediaDownload)
-  {
-    $this->mediaDownload = $mediaDownload;
-  }
-  public function getMediaDownload()
-  {
-    return $this->mediaDownload;
-  }
-  public function setMediaUpload(Google_Service_ServiceUser_MediaUpload $mediaUpload)
-  {
-    $this->mediaUpload = $mediaUpload;
-  }
-  public function getMediaUpload()
-  {
-    return $this->mediaUpload;
   }
   public function setPatch($patch)
   {

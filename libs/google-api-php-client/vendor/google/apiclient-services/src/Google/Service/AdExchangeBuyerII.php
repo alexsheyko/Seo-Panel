@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016 Google Inc.
+ * Copyright 2014 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -19,13 +19,13 @@
  * Service definition for AdExchangeBuyerII (v2beta1).
  *
  * <p>
- * Accesses the latest features for managing Ad Exchange accounts, Real-Time
- * Bidding configurations and auction metrics, and Marketplace programmatic
+ * Accesses the latest features for managing Authorized Buyers accounts, Real-
+ * Time Bidding configurations and auction metrics, and Marketplace programmatic
  * deals.</p>
  *
  * <p>
  * For more information about this service, see the API
- * <a href="https://developers.google.com/ad-exchange/buyer-rest/guides/client-access/" target="_blank">Documentation</a>
+ * <a href="https://developers.google.com/authorized-buyers/apis/reference/rest/" target="_blank">Documentation</a>
  * </p>
  *
  * @author Google, Inc.
@@ -41,17 +41,45 @@ class Google_Service_AdExchangeBuyerII extends Google_Service
   public $accounts_clients_users;
   public $accounts_creatives;
   public $accounts_creatives_dealAssociations;
+  public $accounts_finalizedProposals;
+  public $accounts_products;
+  public $accounts_proposals;
+  public $accounts_publisherProfiles;
+  public $bidders_accounts_filterSets;
+  public $bidders_accounts_filterSets_bidMetrics;
+  public $bidders_accounts_filterSets_bidResponseErrors;
+  public $bidders_accounts_filterSets_bidResponsesWithoutBids;
+  public $bidders_accounts_filterSets_filteredBidRequests;
+  public $bidders_accounts_filterSets_filteredBids;
+  public $bidders_accounts_filterSets_filteredBids_creatives;
+  public $bidders_accounts_filterSets_filteredBids_details;
+  public $bidders_accounts_filterSets_impressionMetrics;
+  public $bidders_accounts_filterSets_losingBids;
+  public $bidders_accounts_filterSets_nonBillableWinningBids;
+  public $bidders_filterSets;
+  public $bidders_filterSets_bidMetrics;
+  public $bidders_filterSets_bidResponseErrors;
+  public $bidders_filterSets_bidResponsesWithoutBids;
+  public $bidders_filterSets_filteredBidRequests;
+  public $bidders_filterSets_filteredBids;
+  public $bidders_filterSets_filteredBids_creatives;
+  public $bidders_filterSets_filteredBids_details;
+  public $bidders_filterSets_impressionMetrics;
+  public $bidders_filterSets_losingBids;
+  public $bidders_filterSets_nonBillableWinningBids;
   
   /**
    * Constructs the internal representation of the AdExchangeBuyerII service.
    *
-   * @param Google_Client $client
+   * @param Google_Client $client The client used to deliver requests.
+   * @param string $rootUrl The root URL used for requests to the service.
    */
-  public function __construct(Google_Client $client)
+  public function __construct(Google_Client $client, $rootUrl = null)
   {
     parent::__construct($client);
-    $this->rootUrl = 'https://adexchangebuyer.googleapis.com/';
+    $this->rootUrl = $rootUrl ?: 'https://adexchangebuyer.googleapis.com/';
     $this->servicePath = '';
+    $this->batchPath = 'batch';
     $this->version = 'v2beta1';
     $this->serviceName = 'adexchangebuyer2';
 
@@ -95,13 +123,17 @@ class Google_Service_AdExchangeBuyerII extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'pageToken' => array(
+                'partnerClientId' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
                 'pageSize' => array(
                   'location' => 'query',
                   'type' => 'integer',
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
                 ),
               ),
             ),'update' => array(
@@ -231,13 +263,13 @@ class Google_Service_AdExchangeBuyerII extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'pageToken' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
                 'pageSize' => array(
                   'location' => 'query',
                   'type' => 'integer',
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
                 ),
               ),
             ),'update' => array(
@@ -308,6 +340,10 @@ class Google_Service_AdExchangeBuyerII extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
+                'query' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
                 'pageToken' => array(
                   'location' => 'query',
                   'type' => 'string',
@@ -315,10 +351,6 @@ class Google_Service_AdExchangeBuyerII extends Google_Service
                 'pageSize' => array(
                   'location' => 'query',
                   'type' => 'integer',
-                ),
-                'query' => array(
-                  'location' => 'query',
-                  'type' => 'string',
                 ),
               ),
             ),'stopWatching' => array(
@@ -405,6 +437,10 @@ class Google_Service_AdExchangeBuyerII extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
+                'query' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
                 'pageToken' => array(
                   'location' => 'query',
                   'type' => 'string',
@@ -412,10 +448,6 @@ class Google_Service_AdExchangeBuyerII extends Google_Service
                 'pageSize' => array(
                   'location' => 'query',
                   'type' => 'integer',
-                ),
-                'query' => array(
-                  'location' => 'query',
-                  'type' => 'string',
                 ),
               ),
             ),'remove' => array(
@@ -431,6 +463,1002 @@ class Google_Service_AdExchangeBuyerII extends Google_Service
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->accounts_finalizedProposals = new Google_Service_AdExchangeBuyerII_Resource_AccountsFinalizedProposals(
+        $this,
+        $this->serviceName,
+        'finalizedProposals',
+        array(
+          'methods' => array(
+            'list' => array(
+              'path' => 'v2beta1/accounts/{accountId}/finalizedProposals',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'accountId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'filterSyntax' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'filter' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->accounts_products = new Google_Service_AdExchangeBuyerII_Resource_AccountsProducts(
+        $this,
+        $this->serviceName,
+        'products',
+        array(
+          'methods' => array(
+            'get' => array(
+              'path' => 'v2beta1/accounts/{accountId}/products/{productId}',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'accountId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'productId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'list' => array(
+              'path' => 'v2beta1/accounts/{accountId}/products',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'accountId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+                'filter' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->accounts_proposals = new Google_Service_AdExchangeBuyerII_Resource_AccountsProposals(
+        $this,
+        $this->serviceName,
+        'proposals',
+        array(
+          'methods' => array(
+            'accept' => array(
+              'path' => 'v2beta1/accounts/{accountId}/proposals/{proposalId}:accept',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'accountId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'proposalId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'addNote' => array(
+              'path' => 'v2beta1/accounts/{accountId}/proposals/{proposalId}:addNote',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'accountId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'proposalId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'cancelNegotiation' => array(
+              'path' => 'v2beta1/accounts/{accountId}/proposals/{proposalId}:cancelNegotiation',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'accountId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'proposalId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'completeSetup' => array(
+              'path' => 'v2beta1/accounts/{accountId}/proposals/{proposalId}:completeSetup',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'accountId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'proposalId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'create' => array(
+              'path' => 'v2beta1/accounts/{accountId}/proposals',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'accountId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'get' => array(
+              'path' => 'v2beta1/accounts/{accountId}/proposals/{proposalId}',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'accountId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'proposalId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'list' => array(
+              'path' => 'v2beta1/accounts/{accountId}/proposals',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'accountId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'filterSyntax' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'filter' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+              ),
+            ),'pause' => array(
+              'path' => 'v2beta1/accounts/{accountId}/proposals/{proposalId}:pause',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'accountId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'proposalId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'resume' => array(
+              'path' => 'v2beta1/accounts/{accountId}/proposals/{proposalId}:resume',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'accountId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'proposalId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'update' => array(
+              'path' => 'v2beta1/accounts/{accountId}/proposals/{proposalId}',
+              'httpMethod' => 'PUT',
+              'parameters' => array(
+                'accountId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'proposalId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->accounts_publisherProfiles = new Google_Service_AdExchangeBuyerII_Resource_AccountsPublisherProfiles(
+        $this,
+        $this->serviceName,
+        'publisherProfiles',
+        array(
+          'methods' => array(
+            'get' => array(
+              'path' => 'v2beta1/accounts/{accountId}/publisherProfiles/{publisherProfileId}',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'accountId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'publisherProfileId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'list' => array(
+              'path' => 'v2beta1/accounts/{accountId}/publisherProfiles',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'accountId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->bidders_accounts_filterSets = new Google_Service_AdExchangeBuyerII_Resource_BiddersAccountsFilterSets(
+        $this,
+        $this->serviceName,
+        'filterSets',
+        array(
+          'methods' => array(
+            'create' => array(
+              'path' => 'v2beta1/{+ownerName}/filterSets',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'ownerName' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'isTransient' => array(
+                  'location' => 'query',
+                  'type' => 'boolean',
+                ),
+              ),
+            ),'delete' => array(
+              'path' => 'v2beta1/{+name}',
+              'httpMethod' => 'DELETE',
+              'parameters' => array(
+                'name' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'get' => array(
+              'path' => 'v2beta1/{+name}',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'name' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'list' => array(
+              'path' => 'v2beta1/{+ownerName}/filterSets',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'ownerName' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->bidders_accounts_filterSets_bidMetrics = new Google_Service_AdExchangeBuyerII_Resource_BiddersAccountsFilterSetsBidMetrics(
+        $this,
+        $this->serviceName,
+        'bidMetrics',
+        array(
+          'methods' => array(
+            'list' => array(
+              'path' => 'v2beta1/{+filterSetName}/bidMetrics',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'filterSetName' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->bidders_accounts_filterSets_bidResponseErrors = new Google_Service_AdExchangeBuyerII_Resource_BiddersAccountsFilterSetsBidResponseErrors(
+        $this,
+        $this->serviceName,
+        'bidResponseErrors',
+        array(
+          'methods' => array(
+            'list' => array(
+              'path' => 'v2beta1/{+filterSetName}/bidResponseErrors',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'filterSetName' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->bidders_accounts_filterSets_bidResponsesWithoutBids = new Google_Service_AdExchangeBuyerII_Resource_BiddersAccountsFilterSetsBidResponsesWithoutBids(
+        $this,
+        $this->serviceName,
+        'bidResponsesWithoutBids',
+        array(
+          'methods' => array(
+            'list' => array(
+              'path' => 'v2beta1/{+filterSetName}/bidResponsesWithoutBids',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'filterSetName' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->bidders_accounts_filterSets_filteredBidRequests = new Google_Service_AdExchangeBuyerII_Resource_BiddersAccountsFilterSetsFilteredBidRequests(
+        $this,
+        $this->serviceName,
+        'filteredBidRequests',
+        array(
+          'methods' => array(
+            'list' => array(
+              'path' => 'v2beta1/{+filterSetName}/filteredBidRequests',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'filterSetName' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->bidders_accounts_filterSets_filteredBids = new Google_Service_AdExchangeBuyerII_Resource_BiddersAccountsFilterSetsFilteredBids(
+        $this,
+        $this->serviceName,
+        'filteredBids',
+        array(
+          'methods' => array(
+            'list' => array(
+              'path' => 'v2beta1/{+filterSetName}/filteredBids',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'filterSetName' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->bidders_accounts_filterSets_filteredBids_creatives = new Google_Service_AdExchangeBuyerII_Resource_BiddersAccountsFilterSetsFilteredBidsCreatives(
+        $this,
+        $this->serviceName,
+        'creatives',
+        array(
+          'methods' => array(
+            'list' => array(
+              'path' => 'v2beta1/{+filterSetName}/filteredBids/{creativeStatusId}/creatives',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'filterSetName' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'creativeStatusId' => array(
+                  'location' => 'path',
+                  'type' => 'integer',
+                  'required' => true,
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->bidders_accounts_filterSets_filteredBids_details = new Google_Service_AdExchangeBuyerII_Resource_BiddersAccountsFilterSetsFilteredBidsDetails(
+        $this,
+        $this->serviceName,
+        'details',
+        array(
+          'methods' => array(
+            'list' => array(
+              'path' => 'v2beta1/{+filterSetName}/filteredBids/{creativeStatusId}/details',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'filterSetName' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'creativeStatusId' => array(
+                  'location' => 'path',
+                  'type' => 'integer',
+                  'required' => true,
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->bidders_accounts_filterSets_impressionMetrics = new Google_Service_AdExchangeBuyerII_Resource_BiddersAccountsFilterSetsImpressionMetrics(
+        $this,
+        $this->serviceName,
+        'impressionMetrics',
+        array(
+          'methods' => array(
+            'list' => array(
+              'path' => 'v2beta1/{+filterSetName}/impressionMetrics',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'filterSetName' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->bidders_accounts_filterSets_losingBids = new Google_Service_AdExchangeBuyerII_Resource_BiddersAccountsFilterSetsLosingBids(
+        $this,
+        $this->serviceName,
+        'losingBids',
+        array(
+          'methods' => array(
+            'list' => array(
+              'path' => 'v2beta1/{+filterSetName}/losingBids',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'filterSetName' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->bidders_accounts_filterSets_nonBillableWinningBids = new Google_Service_AdExchangeBuyerII_Resource_BiddersAccountsFilterSetsNonBillableWinningBids(
+        $this,
+        $this->serviceName,
+        'nonBillableWinningBids',
+        array(
+          'methods' => array(
+            'list' => array(
+              'path' => 'v2beta1/{+filterSetName}/nonBillableWinningBids',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'filterSetName' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->bidders_filterSets = new Google_Service_AdExchangeBuyerII_Resource_BiddersFilterSets(
+        $this,
+        $this->serviceName,
+        'filterSets',
+        array(
+          'methods' => array(
+            'create' => array(
+              'path' => 'v2beta1/{+ownerName}/filterSets',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'ownerName' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'isTransient' => array(
+                  'location' => 'query',
+                  'type' => 'boolean',
+                ),
+              ),
+            ),'delete' => array(
+              'path' => 'v2beta1/{+name}',
+              'httpMethod' => 'DELETE',
+              'parameters' => array(
+                'name' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'get' => array(
+              'path' => 'v2beta1/{+name}',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'name' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'list' => array(
+              'path' => 'v2beta1/{+ownerName}/filterSets',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'ownerName' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->bidders_filterSets_bidMetrics = new Google_Service_AdExchangeBuyerII_Resource_BiddersFilterSetsBidMetrics(
+        $this,
+        $this->serviceName,
+        'bidMetrics',
+        array(
+          'methods' => array(
+            'list' => array(
+              'path' => 'v2beta1/{+filterSetName}/bidMetrics',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'filterSetName' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->bidders_filterSets_bidResponseErrors = new Google_Service_AdExchangeBuyerII_Resource_BiddersFilterSetsBidResponseErrors(
+        $this,
+        $this->serviceName,
+        'bidResponseErrors',
+        array(
+          'methods' => array(
+            'list' => array(
+              'path' => 'v2beta1/{+filterSetName}/bidResponseErrors',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'filterSetName' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->bidders_filterSets_bidResponsesWithoutBids = new Google_Service_AdExchangeBuyerII_Resource_BiddersFilterSetsBidResponsesWithoutBids(
+        $this,
+        $this->serviceName,
+        'bidResponsesWithoutBids',
+        array(
+          'methods' => array(
+            'list' => array(
+              'path' => 'v2beta1/{+filterSetName}/bidResponsesWithoutBids',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'filterSetName' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->bidders_filterSets_filteredBidRequests = new Google_Service_AdExchangeBuyerII_Resource_BiddersFilterSetsFilteredBidRequests(
+        $this,
+        $this->serviceName,
+        'filteredBidRequests',
+        array(
+          'methods' => array(
+            'list' => array(
+              'path' => 'v2beta1/{+filterSetName}/filteredBidRequests',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'filterSetName' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->bidders_filterSets_filteredBids = new Google_Service_AdExchangeBuyerII_Resource_BiddersFilterSetsFilteredBids(
+        $this,
+        $this->serviceName,
+        'filteredBids',
+        array(
+          'methods' => array(
+            'list' => array(
+              'path' => 'v2beta1/{+filterSetName}/filteredBids',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'filterSetName' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->bidders_filterSets_filteredBids_creatives = new Google_Service_AdExchangeBuyerII_Resource_BiddersFilterSetsFilteredBidsCreatives(
+        $this,
+        $this->serviceName,
+        'creatives',
+        array(
+          'methods' => array(
+            'list' => array(
+              'path' => 'v2beta1/{+filterSetName}/filteredBids/{creativeStatusId}/creatives',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'filterSetName' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'creativeStatusId' => array(
+                  'location' => 'path',
+                  'type' => 'integer',
+                  'required' => true,
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->bidders_filterSets_filteredBids_details = new Google_Service_AdExchangeBuyerII_Resource_BiddersFilterSetsFilteredBidsDetails(
+        $this,
+        $this->serviceName,
+        'details',
+        array(
+          'methods' => array(
+            'list' => array(
+              'path' => 'v2beta1/{+filterSetName}/filteredBids/{creativeStatusId}/details',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'filterSetName' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'creativeStatusId' => array(
+                  'location' => 'path',
+                  'type' => 'integer',
+                  'required' => true,
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->bidders_filterSets_impressionMetrics = new Google_Service_AdExchangeBuyerII_Resource_BiddersFilterSetsImpressionMetrics(
+        $this,
+        $this->serviceName,
+        'impressionMetrics',
+        array(
+          'methods' => array(
+            'list' => array(
+              'path' => 'v2beta1/{+filterSetName}/impressionMetrics',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'filterSetName' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->bidders_filterSets_losingBids = new Google_Service_AdExchangeBuyerII_Resource_BiddersFilterSetsLosingBids(
+        $this,
+        $this->serviceName,
+        'losingBids',
+        array(
+          'methods' => array(
+            'list' => array(
+              'path' => 'v2beta1/{+filterSetName}/losingBids',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'filterSetName' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->bidders_filterSets_nonBillableWinningBids = new Google_Service_AdExchangeBuyerII_Resource_BiddersFilterSetsNonBillableWinningBids(
+        $this,
+        $this->serviceName,
+        'nonBillableWinningBids',
+        array(
+          'methods' => array(
+            'list' => array(
+              'path' => 'v2beta1/{+filterSetName}/nonBillableWinningBids',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'filterSetName' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
                 ),
               ),
             ),

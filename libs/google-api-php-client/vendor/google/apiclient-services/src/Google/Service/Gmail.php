@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016 Google Inc.
+ * Copyright 2014 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -19,7 +19,8 @@
  * Service definition for Gmail (v1).
  *
  * <p>
- * Access Gmail mailboxes including sending user email.</p>
+ * The Gmail API lets you view and manage Gmail mailbox data like threads,
+ * messages, and labels.</p>
  *
  * <p>
  * For more information about this service, see the API
@@ -30,9 +31,21 @@
  */
 class Google_Service_Gmail extends Google_Service
 {
-  /** Read, send, delete, and manage your email. */
+  /** Read, compose, send, and permanently delete all your email from Gmail. */
   const MAIL_GOOGLE_COM =
       "https://mail.google.com/";
+  /** Manage drafts and send emails when you interact with the add-on. */
+  const GMAIL_ADDONS_CURRENT_ACTION_COMPOSE =
+      "https://www.googleapis.com/auth/gmail.addons.current.action.compose";
+  /** View your email messages when you interact with the add-on. */
+  const GMAIL_ADDONS_CURRENT_MESSAGE_ACTION =
+      "https://www.googleapis.com/auth/gmail.addons.current.message.action";
+  /** View your email message metadata when the add-on is running. */
+  const GMAIL_ADDONS_CURRENT_MESSAGE_METADATA =
+      "https://www.googleapis.com/auth/gmail.addons.current.message.metadata";
+  /** View your email messages when the add-on is running. */
+  const GMAIL_ADDONS_CURRENT_MESSAGE_READONLY =
+      "https://www.googleapis.com/auth/gmail.addons.current.message.readonly";
   /** Manage drafts and send emails. */
   const GMAIL_COMPOSE =
       "https://www.googleapis.com/auth/gmail.compose";
@@ -48,7 +61,7 @@ class Google_Service_Gmail extends Google_Service
   /** View and modify but not delete your email. */
   const GMAIL_MODIFY =
       "https://www.googleapis.com/auth/gmail.modify";
-  /** View your emails messages and settings. */
+  /** View your email messages and settings. */
   const GMAIL_READONLY =
       "https://www.googleapis.com/auth/gmail.readonly";
   /** Send email on your behalf. */
@@ -68,6 +81,7 @@ class Google_Service_Gmail extends Google_Service
   public $users_messages;
   public $users_messages_attachments;
   public $users_settings;
+  public $users_settings_delegates;
   public $users_settings_filters;
   public $users_settings_forwardingAddresses;
   public $users_settings_sendAs;
@@ -77,13 +91,15 @@ class Google_Service_Gmail extends Google_Service
   /**
    * Constructs the internal representation of the Gmail service.
    *
-   * @param Google_Client $client
+   * @param Google_Client $client The client used to deliver requests.
+   * @param string $rootUrl The root URL used for requests to the service.
    */
-  public function __construct(Google_Client $client)
+  public function __construct(Google_Client $client, $rootUrl = null)
   {
     parent::__construct($client);
-    $this->rootUrl = 'https://www.googleapis.com/';
-    $this->servicePath = 'gmail/v1/users/';
+    $this->rootUrl = $rootUrl ?: 'https://gmail.googleapis.com/';
+    $this->servicePath = '';
+    $this->batchPath = 'batch';
     $this->version = 'v1';
     $this->serviceName = 'gmail';
 
@@ -94,7 +110,7 @@ class Google_Service_Gmail extends Google_Service
         array(
           'methods' => array(
             'getProfile' => array(
-              'path' => '{userId}/profile',
+              'path' => 'gmail/v1/users/{userId}/profile',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'userId' => array(
@@ -104,7 +120,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'stop' => array(
-              'path' => '{userId}/stop',
+              'path' => 'gmail/v1/users/{userId}/stop',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'userId' => array(
@@ -114,7 +130,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'watch' => array(
-              'path' => '{userId}/watch',
+              'path' => 'gmail/v1/users/{userId}/watch',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'userId' => array(
@@ -134,7 +150,7 @@ class Google_Service_Gmail extends Google_Service
         array(
           'methods' => array(
             'create' => array(
-              'path' => '{userId}/drafts',
+              'path' => 'gmail/v1/users/{userId}/drafts',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'userId' => array(
@@ -144,7 +160,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'delete' => array(
-              'path' => '{userId}/drafts/{id}',
+              'path' => 'gmail/v1/users/{userId}/drafts/{id}',
               'httpMethod' => 'DELETE',
               'parameters' => array(
                 'userId' => array(
@@ -159,7 +175,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'get' => array(
-              'path' => '{userId}/drafts/{id}',
+              'path' => 'gmail/v1/users/{userId}/drafts/{id}',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'userId' => array(
@@ -178,13 +194,21 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'list' => array(
-              'path' => '{userId}/drafts',
+              'path' => 'gmail/v1/users/{userId}/drafts',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'userId' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
+                ),
+                'q' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
                 ),
                 'includeSpamTrash' => array(
                   'location' => 'query',
@@ -194,17 +218,9 @@ class Google_Service_Gmail extends Google_Service
                   'location' => 'query',
                   'type' => 'integer',
                 ),
-                'pageToken' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'q' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
               ),
             ),'send' => array(
-              'path' => '{userId}/drafts/send',
+              'path' => 'gmail/v1/users/{userId}/drafts/send',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'userId' => array(
@@ -214,7 +230,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'update' => array(
-              'path' => '{userId}/drafts/{id}',
+              'path' => 'gmail/v1/users/{userId}/drafts/{id}',
               'httpMethod' => 'PUT',
               'parameters' => array(
                 'userId' => array(
@@ -239,7 +255,7 @@ class Google_Service_Gmail extends Google_Service
         array(
           'methods' => array(
             'list' => array(
-              'path' => '{userId}/history',
+              'path' => 'gmail/v1/users/{userId}/history',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'userId' => array(
@@ -247,12 +263,16 @@ class Google_Service_Gmail extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
+                'labelId' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
                 'historyTypes' => array(
                   'location' => 'query',
                   'type' => 'string',
                   'repeated' => true,
                 ),
-                'labelId' => array(
+                'startHistoryId' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -261,10 +281,6 @@ class Google_Service_Gmail extends Google_Service
                   'type' => 'integer',
                 ),
                 'pageToken' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'startHistoryId' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -280,7 +296,7 @@ class Google_Service_Gmail extends Google_Service
         array(
           'methods' => array(
             'create' => array(
-              'path' => '{userId}/labels',
+              'path' => 'gmail/v1/users/{userId}/labels',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'userId' => array(
@@ -290,7 +306,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'delete' => array(
-              'path' => '{userId}/labels/{id}',
+              'path' => 'gmail/v1/users/{userId}/labels/{id}',
               'httpMethod' => 'DELETE',
               'parameters' => array(
                 'userId' => array(
@@ -305,7 +321,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'get' => array(
-              'path' => '{userId}/labels/{id}',
+              'path' => 'gmail/v1/users/{userId}/labels/{id}',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'userId' => array(
@@ -320,7 +336,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'list' => array(
-              'path' => '{userId}/labels',
+              'path' => 'gmail/v1/users/{userId}/labels',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'userId' => array(
@@ -330,7 +346,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'patch' => array(
-              'path' => '{userId}/labels/{id}',
+              'path' => 'gmail/v1/users/{userId}/labels/{id}',
               'httpMethod' => 'PATCH',
               'parameters' => array(
                 'userId' => array(
@@ -345,7 +361,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'update' => array(
-              'path' => '{userId}/labels/{id}',
+              'path' => 'gmail/v1/users/{userId}/labels/{id}',
               'httpMethod' => 'PUT',
               'parameters' => array(
                 'userId' => array(
@@ -370,7 +386,7 @@ class Google_Service_Gmail extends Google_Service
         array(
           'methods' => array(
             'batchDelete' => array(
-              'path' => '{userId}/messages/batchDelete',
+              'path' => 'gmail/v1/users/{userId}/messages/batchDelete',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'userId' => array(
@@ -380,7 +396,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'batchModify' => array(
-              'path' => '{userId}/messages/batchModify',
+              'path' => 'gmail/v1/users/{userId}/messages/batchModify',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'userId' => array(
@@ -390,7 +406,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'delete' => array(
-              'path' => '{userId}/messages/{id}',
+              'path' => 'gmail/v1/users/{userId}/messages/{id}',
               'httpMethod' => 'DELETE',
               'parameters' => array(
                 'userId' => array(
@@ -405,7 +421,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'get' => array(
-              'path' => '{userId}/messages/{id}',
+              'path' => 'gmail/v1/users/{userId}/messages/{id}',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'userId' => array(
@@ -418,32 +434,24 @@ class Google_Service_Gmail extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'format' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
                 'metadataHeaders' => array(
                   'location' => 'query',
                   'type' => 'string',
                   'repeated' => true,
                 ),
+                'format' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
               ),
             ),'import' => array(
-              'path' => '{userId}/messages/import',
+              'path' => 'gmail/v1/users/{userId}/messages/import',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'userId' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
-                ),
-                'deleted' => array(
-                  'location' => 'query',
-                  'type' => 'boolean',
-                ),
-                'internalDateSource' => array(
-                  'location' => 'query',
-                  'type' => 'string',
                 ),
                 'neverMarkSpam' => array(
                   'location' => 'query',
@@ -453,9 +461,17 @@ class Google_Service_Gmail extends Google_Service
                   'location' => 'query',
                   'type' => 'boolean',
                 ),
+                'deleted' => array(
+                  'location' => 'query',
+                  'type' => 'boolean',
+                ),
+                'internalDateSource' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
               ),
             ),'insert' => array(
-              'path' => '{userId}/messages',
+              'path' => 'gmail/v1/users/{userId}/messages',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'userId' => array(
@@ -473,7 +489,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'list' => array(
-              'path' => '{userId}/messages',
+              'path' => 'gmail/v1/users/{userId}/messages',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'userId' => array(
@@ -481,30 +497,30 @@ class Google_Service_Gmail extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
+                'q' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
                 'includeSpamTrash' => array(
                   'location' => 'query',
                   'type' => 'boolean',
+                ),
+                'maxResults' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
                 ),
                 'labelIds' => array(
                   'location' => 'query',
                   'type' => 'string',
                   'repeated' => true,
                 ),
-                'maxResults' => array(
-                  'location' => 'query',
-                  'type' => 'integer',
-                ),
                 'pageToken' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'q' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
               ),
             ),'modify' => array(
-              'path' => '{userId}/messages/{id}/modify',
+              'path' => 'gmail/v1/users/{userId}/messages/{id}/modify',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'userId' => array(
@@ -519,7 +535,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'send' => array(
-              'path' => '{userId}/messages/send',
+              'path' => 'gmail/v1/users/{userId}/messages/send',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'userId' => array(
@@ -529,7 +545,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'trash' => array(
-              'path' => '{userId}/messages/{id}/trash',
+              'path' => 'gmail/v1/users/{userId}/messages/{id}/trash',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'userId' => array(
@@ -544,7 +560,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'untrash' => array(
-              'path' => '{userId}/messages/{id}/untrash',
+              'path' => 'gmail/v1/users/{userId}/messages/{id}/untrash',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'userId' => array(
@@ -569,7 +585,7 @@ class Google_Service_Gmail extends Google_Service
         array(
           'methods' => array(
             'get' => array(
-              'path' => '{userId}/messages/{messageId}/attachments/{id}',
+              'path' => 'gmail/v1/users/{userId}/messages/{messageId}/attachments/{id}',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'userId' => array(
@@ -599,7 +615,7 @@ class Google_Service_Gmail extends Google_Service
         array(
           'methods' => array(
             'getAutoForwarding' => array(
-              'path' => '{userId}/settings/autoForwarding',
+              'path' => 'gmail/v1/users/{userId}/settings/autoForwarding',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'userId' => array(
@@ -609,7 +625,17 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'getImap' => array(
-              'path' => '{userId}/settings/imap',
+              'path' => 'gmail/v1/users/{userId}/settings/imap',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'userId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'getLanguage' => array(
+              'path' => 'gmail/v1/users/{userId}/settings/language',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'userId' => array(
@@ -619,7 +645,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'getPop' => array(
-              'path' => '{userId}/settings/pop',
+              'path' => 'gmail/v1/users/{userId}/settings/pop',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'userId' => array(
@@ -629,7 +655,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'getVacation' => array(
-              'path' => '{userId}/settings/vacation',
+              'path' => 'gmail/v1/users/{userId}/settings/vacation',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'userId' => array(
@@ -639,7 +665,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'updateAutoForwarding' => array(
-              'path' => '{userId}/settings/autoForwarding',
+              'path' => 'gmail/v1/users/{userId}/settings/autoForwarding',
               'httpMethod' => 'PUT',
               'parameters' => array(
                 'userId' => array(
@@ -649,7 +675,17 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'updateImap' => array(
-              'path' => '{userId}/settings/imap',
+              'path' => 'gmail/v1/users/{userId}/settings/imap',
+              'httpMethod' => 'PUT',
+              'parameters' => array(
+                'userId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'updateLanguage' => array(
+              'path' => 'gmail/v1/users/{userId}/settings/language',
               'httpMethod' => 'PUT',
               'parameters' => array(
                 'userId' => array(
@@ -659,7 +695,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'updatePop' => array(
-              'path' => '{userId}/settings/pop',
+              'path' => 'gmail/v1/users/{userId}/settings/pop',
               'httpMethod' => 'PUT',
               'parameters' => array(
                 'userId' => array(
@@ -669,8 +705,68 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'updateVacation' => array(
-              'path' => '{userId}/settings/vacation',
+              'path' => 'gmail/v1/users/{userId}/settings/vacation',
               'httpMethod' => 'PUT',
+              'parameters' => array(
+                'userId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->users_settings_delegates = new Google_Service_Gmail_Resource_UsersSettingsDelegates(
+        $this,
+        $this->serviceName,
+        'delegates',
+        array(
+          'methods' => array(
+            'create' => array(
+              'path' => 'gmail/v1/users/{userId}/settings/delegates',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'userId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'delete' => array(
+              'path' => 'gmail/v1/users/{userId}/settings/delegates/{delegateEmail}',
+              'httpMethod' => 'DELETE',
+              'parameters' => array(
+                'userId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'delegateEmail' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'get' => array(
+              'path' => 'gmail/v1/users/{userId}/settings/delegates/{delegateEmail}',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'userId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'delegateEmail' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'list' => array(
+              'path' => 'gmail/v1/users/{userId}/settings/delegates',
+              'httpMethod' => 'GET',
               'parameters' => array(
                 'userId' => array(
                   'location' => 'path',
@@ -689,7 +785,7 @@ class Google_Service_Gmail extends Google_Service
         array(
           'methods' => array(
             'create' => array(
-              'path' => '{userId}/settings/filters',
+              'path' => 'gmail/v1/users/{userId}/settings/filters',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'userId' => array(
@@ -699,7 +795,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'delete' => array(
-              'path' => '{userId}/settings/filters/{id}',
+              'path' => 'gmail/v1/users/{userId}/settings/filters/{id}',
               'httpMethod' => 'DELETE',
               'parameters' => array(
                 'userId' => array(
@@ -714,7 +810,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'get' => array(
-              'path' => '{userId}/settings/filters/{id}',
+              'path' => 'gmail/v1/users/{userId}/settings/filters/{id}',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'userId' => array(
@@ -729,7 +825,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'list' => array(
-              'path' => '{userId}/settings/filters',
+              'path' => 'gmail/v1/users/{userId}/settings/filters',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'userId' => array(
@@ -749,7 +845,7 @@ class Google_Service_Gmail extends Google_Service
         array(
           'methods' => array(
             'create' => array(
-              'path' => '{userId}/settings/forwardingAddresses',
+              'path' => 'gmail/v1/users/{userId}/settings/forwardingAddresses',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'userId' => array(
@@ -759,7 +855,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'delete' => array(
-              'path' => '{userId}/settings/forwardingAddresses/{forwardingEmail}',
+              'path' => 'gmail/v1/users/{userId}/settings/forwardingAddresses/{forwardingEmail}',
               'httpMethod' => 'DELETE',
               'parameters' => array(
                 'userId' => array(
@@ -774,7 +870,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'get' => array(
-              'path' => '{userId}/settings/forwardingAddresses/{forwardingEmail}',
+              'path' => 'gmail/v1/users/{userId}/settings/forwardingAddresses/{forwardingEmail}',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'userId' => array(
@@ -789,7 +885,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'list' => array(
-              'path' => '{userId}/settings/forwardingAddresses',
+              'path' => 'gmail/v1/users/{userId}/settings/forwardingAddresses',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'userId' => array(
@@ -809,7 +905,7 @@ class Google_Service_Gmail extends Google_Service
         array(
           'methods' => array(
             'create' => array(
-              'path' => '{userId}/settings/sendAs',
+              'path' => 'gmail/v1/users/{userId}/settings/sendAs',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'userId' => array(
@@ -819,7 +915,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'delete' => array(
-              'path' => '{userId}/settings/sendAs/{sendAsEmail}',
+              'path' => 'gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}',
               'httpMethod' => 'DELETE',
               'parameters' => array(
                 'userId' => array(
@@ -834,7 +930,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'get' => array(
-              'path' => '{userId}/settings/sendAs/{sendAsEmail}',
+              'path' => 'gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'userId' => array(
@@ -849,7 +945,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'list' => array(
-              'path' => '{userId}/settings/sendAs',
+              'path' => 'gmail/v1/users/{userId}/settings/sendAs',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'userId' => array(
@@ -859,7 +955,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'patch' => array(
-              'path' => '{userId}/settings/sendAs/{sendAsEmail}',
+              'path' => 'gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}',
               'httpMethod' => 'PATCH',
               'parameters' => array(
                 'userId' => array(
@@ -874,7 +970,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'update' => array(
-              'path' => '{userId}/settings/sendAs/{sendAsEmail}',
+              'path' => 'gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}',
               'httpMethod' => 'PUT',
               'parameters' => array(
                 'userId' => array(
@@ -889,7 +985,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'verify' => array(
-              'path' => '{userId}/settings/sendAs/{sendAsEmail}/verify',
+              'path' => 'gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}/verify',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'userId' => array(
@@ -914,7 +1010,7 @@ class Google_Service_Gmail extends Google_Service
         array(
           'methods' => array(
             'delete' => array(
-              'path' => '{userId}/settings/sendAs/{sendAsEmail}/smimeInfo/{id}',
+              'path' => 'gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo/{id}',
               'httpMethod' => 'DELETE',
               'parameters' => array(
                 'userId' => array(
@@ -934,7 +1030,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'get' => array(
-              'path' => '{userId}/settings/sendAs/{sendAsEmail}/smimeInfo/{id}',
+              'path' => 'gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo/{id}',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'userId' => array(
@@ -954,7 +1050,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'insert' => array(
-              'path' => '{userId}/settings/sendAs/{sendAsEmail}/smimeInfo',
+              'path' => 'gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'userId' => array(
@@ -969,7 +1065,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'list' => array(
-              'path' => '{userId}/settings/sendAs/{sendAsEmail}/smimeInfo',
+              'path' => 'gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'userId' => array(
@@ -984,7 +1080,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'setDefault' => array(
-              'path' => '{userId}/settings/sendAs/{sendAsEmail}/smimeInfo/{id}/setDefault',
+              'path' => 'gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo/{id}/setDefault',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'userId' => array(
@@ -1014,7 +1110,7 @@ class Google_Service_Gmail extends Google_Service
         array(
           'methods' => array(
             'delete' => array(
-              'path' => '{userId}/threads/{id}',
+              'path' => 'gmail/v1/users/{userId}/threads/{id}',
               'httpMethod' => 'DELETE',
               'parameters' => array(
                 'userId' => array(
@@ -1029,7 +1125,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'get' => array(
-              'path' => '{userId}/threads/{id}',
+              'path' => 'gmail/v1/users/{userId}/threads/{id}',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'userId' => array(
@@ -1042,33 +1138,24 @@ class Google_Service_Gmail extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'format' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
                 'metadataHeaders' => array(
                   'location' => 'query',
                   'type' => 'string',
                   'repeated' => true,
                 ),
+                'format' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
               ),
             ),'list' => array(
-              'path' => '{userId}/threads',
+              'path' => 'gmail/v1/users/{userId}/threads',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'userId' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
-                ),
-                'includeSpamTrash' => array(
-                  'location' => 'query',
-                  'type' => 'boolean',
-                ),
-                'labelIds' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                  'repeated' => true,
                 ),
                 'maxResults' => array(
                   'location' => 'query',
@@ -1082,9 +1169,18 @@ class Google_Service_Gmail extends Google_Service
                   'location' => 'query',
                   'type' => 'string',
                 ),
+                'labelIds' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                  'repeated' => true,
+                ),
+                'includeSpamTrash' => array(
+                  'location' => 'query',
+                  'type' => 'boolean',
+                ),
               ),
             ),'modify' => array(
-              'path' => '{userId}/threads/{id}/modify',
+              'path' => 'gmail/v1/users/{userId}/threads/{id}/modify',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'userId' => array(
@@ -1099,7 +1195,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'trash' => array(
-              'path' => '{userId}/threads/{id}/trash',
+              'path' => 'gmail/v1/users/{userId}/threads/{id}/trash',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'userId' => array(
@@ -1114,7 +1210,7 @@ class Google_Service_Gmail extends Google_Service
                 ),
               ),
             ),'untrash' => array(
-              'path' => '{userId}/threads/{id}/untrash',
+              'path' => 'gmail/v1/users/{userId}/threads/{id}/untrash',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'userId' => array(

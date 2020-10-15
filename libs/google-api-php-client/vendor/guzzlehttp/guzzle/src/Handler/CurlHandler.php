@@ -1,7 +1,8 @@
 <?php
+
 namespace GuzzleHttp\Handler;
 
-use GuzzleHttp\Psr7;
+use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Message\RequestInterface;
 
 /**
@@ -13,7 +14,9 @@ use Psr\Http\Message\RequestInterface;
  */
 class CurlHandler
 {
-    /** @var CurlFactoryInterface */
+    /**
+     * @var CurlFactoryInterface
+     */
     private $factory;
 
     /**
@@ -25,48 +28,19 @@ class CurlHandler
      */
     public function __construct(array $options = [])
     {
-        $this->factory = isset($options['handle_factory'])
-            ? $options['handle_factory']
-            : new CurlFactory(3);
+        $this->factory = $options['handle_factory']
+            ?? new CurlFactory(3);
     }
 
-    public function __invoke(RequestInterface $request, array $options)
+    public function __invoke(RequestInterface $request, array $options): PromiseInterface
     {
         if (isset($options['delay'])) {
-            usleep($options['delay'] * 1000);
+            \usleep($options['delay'] * 1000);
         }
 
         $easy = $this->factory->create($request, $options);
-        
-        /////////////////////////////////// StartCustom code by seo panel////////////////////////
-        // add proxy details to handle. Custom code added by seo panel team
-        list($easy->handle, $proxyId) = \ProxyController::addProxyToCurlHandle($easy->handle, SP_ENABLE_PROXY_GOOGLE_API);
-        
-        // Custom code added by seo panel team
-        $ret['page'] = curl_exec( $easy->handle );
-        $ret['error'] = curl_errno( $easy->handle );
-        $ret['errmsg'] = curl_error( $easy->handle );
-        $easy->errno = $ret['error'];
-        
-        // update crawl log in database for future reference
-        $effectiveUrl = curl_getinfo($easy->handle, CURLINFO_EFFECTIVE_URL);
-        $effectiveUrl = preg_replace('/&key=(.*)/', '&key=XXX', $effectiveUrl);
-        $crawlLogCtrl = new \CrawlLogController();
-        $crawlInfo['crawl_status'] = $ret['error'] ? 0 : 1;
-        $crawlInfo['crawl_link'] = $effectiveUrl;
-        $crawlInfo['ref_id'] = $crawlInfo['crawl_link'];
-        $crawlInfo['crawl_referer'] = $crawlInfo['crawl_link'];
-        $crawlInfo['proxy_id'] = intval($proxyInfo['id']);
-        $crawlInfo['log_message'] = addslashes($ret['errmsg']);
-        $ret['log_id'] = $crawlLogCtrl->createCrawlLog($crawlInfo);
-        
-        // save proxy status according to the results
-        \ProxyController::processProxyStatus($ret, $proxyId);
-        
-        //curl_exec($easy->handle);
-        //$easy->errno = curl_errno($easy->handle);
-        ///////////////////////////////////End Custom code by seo panel////////////////////////       
-        
+        \curl_exec($easy->handle);
+        $easy->errno = \curl_errno($easy->handle);
 
         return CurlFactory::finish($this, $easy, $this->factory);
     }

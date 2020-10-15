@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016 Google Inc.
+ * Copyright 2014 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -19,6 +19,8 @@ class Google_Service_YouTube_IngestionInfo extends Google_Model
 {
   public $backupIngestionAddress;
   public $ingestionAddress;
+  public $rtmpsBackupIngestionAddress;
+  public $rtmpsIngestionAddress;
   public $streamName;
 
   public function setBackupIngestionAddress($backupIngestionAddress)
@@ -36,6 +38,22 @@ class Google_Service_YouTube_IngestionInfo extends Google_Model
   public function getIngestionAddress()
   {
     return $this->ingestionAddress;
+  }
+  public function setRtmpsBackupIngestionAddress($rtmpsBackupIngestionAddress)
+  {
+    $this->rtmpsBackupIngestionAddress = $rtmpsBackupIngestionAddress;
+  }
+  public function getRtmpsBackupIngestionAddress()
+  {
+    return $this->rtmpsBackupIngestionAddress;
+  }
+  public function setRtmpsIngestionAddress($rtmpsIngestionAddress)
+  {
+    $this->rtmpsIngestionAddress = $rtmpsIngestionAddress;
+  }
+  public function getRtmpsIngestionAddress()
+  {
+    return $this->rtmpsIngestionAddress;
   }
   public function setStreamName($streamName)
   {

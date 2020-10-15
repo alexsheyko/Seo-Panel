@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016 Google Inc.
+ * Copyright 2014 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,7 +18,12 @@
 class Google_Service_ServiceControl_RequestMetadata extends Google_Model
 {
   public $callerIp;
+  public $callerNetwork;
   public $callerSuppliedUserAgent;
+  protected $destinationAttributesType = 'Google_Service_ServiceControl_Peer';
+  protected $destinationAttributesDataType = '';
+  protected $requestAttributesType = 'Google_Service_ServiceControl_Request';
+  protected $requestAttributesDataType = '';
 
   public function setCallerIp($callerIp)
   {
@@ -28,6 +33,14 @@ class Google_Service_ServiceControl_RequestMetadata extends Google_Model
   {
     return $this->callerIp;
   }
+  public function setCallerNetwork($callerNetwork)
+  {
+    $this->callerNetwork = $callerNetwork;
+  }
+  public function getCallerNetwork()
+  {
+    return $this->callerNetwork;
+  }
   public function setCallerSuppliedUserAgent($callerSuppliedUserAgent)
   {
     $this->callerSuppliedUserAgent = $callerSuppliedUserAgent;
@@ -35,5 +48,33 @@ class Google_Service_ServiceControl_RequestMetadata extends Google_Model
   public function getCallerSuppliedUserAgent()
   {
     return $this->callerSuppliedUserAgent;
+  }
+  /**
+   * @param Google_Service_ServiceControl_Peer
+   */
+  public function setDestinationAttributes(Google_Service_ServiceControl_Peer $destinationAttributes)
+  {
+    $this->destinationAttributes = $destinationAttributes;
+  }
+  /**
+   * @return Google_Service_ServiceControl_Peer
+   */
+  public function getDestinationAttributes()
+  {
+    return $this->destinationAttributes;
+  }
+  /**
+   * @param Google_Service_ServiceControl_Request
+   */
+  public function setRequestAttributes(Google_Service_ServiceControl_Request $requestAttributes)
+  {
+    $this->requestAttributes = $requestAttributes;
+  }
+  /**
+   * @return Google_Service_ServiceControl_Request
+   */
+  public function getRequestAttributes()
+  {
+    return $this->requestAttributes;
   }
 }

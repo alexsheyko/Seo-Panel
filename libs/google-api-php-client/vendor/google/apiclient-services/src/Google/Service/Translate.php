@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016 Google Inc.
+ * Copyright 2014 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,53 +16,88 @@
  */
 
 /**
- * Service definition for Translate (v2).
+ * Service definition for Translate (v3).
  *
  * <p>
- * Translates text from one language to another.</p>
+ * Integrates text translation into your website or application.</p>
  *
  * <p>
  * For more information about this service, see the API
- * <a href="https://developers.google.com/translate/v2/using_rest" target="_blank">Documentation</a>
+ * <a href="https://cloud.google.com/translate/docs/quickstarts" target="_blank">Documentation</a>
  * </p>
  *
  * @author Google, Inc.
  */
 class Google_Service_Translate extends Google_Service
 {
+  /** View and manage your data across Google Cloud Platform services. */
+  const CLOUD_PLATFORM =
+      "https://www.googleapis.com/auth/cloud-platform";
+  /** Translate text from one language to another using Google Translate. */
+  const CLOUD_TRANSLATION =
+      "https://www.googleapis.com/auth/cloud-translation";
 
-
-  public $detections;
-  public $languages;
-  public $translations;
+  public $projects;
+  public $projects_locations;
+  public $projects_locations_glossaries;
+  public $projects_locations_operations;
   
   /**
    * Constructs the internal representation of the Translate service.
    *
-   * @param Google_Client $client
+   * @param Google_Client $client The client used to deliver requests.
+   * @param string $rootUrl The root URL used for requests to the service.
    */
-  public function __construct(Google_Client $client)
+  public function __construct(Google_Client $client, $rootUrl = null)
   {
     parent::__construct($client);
-    $this->rootUrl = 'https://www.googleapis.com/';
-    $this->servicePath = 'language/translate/';
-    $this->version = 'v2';
+    $this->rootUrl = $rootUrl ?: 'https://translation.googleapis.com/';
+    $this->servicePath = '';
+    $this->batchPath = 'batch';
+    $this->version = 'v3';
     $this->serviceName = 'translate';
 
-    $this->detections = new Google_Service_Translate_Resource_Detections(
+    $this->projects = new Google_Service_Translate_Resource_Projects(
         $this,
         $this->serviceName,
-        'detections',
+        'projects',
         array(
           'methods' => array(
-            'list' => array(
-              'path' => 'v2/detect',
+            'detectLanguage' => array(
+              'path' => 'v3/{+parent}:detectLanguage',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'parent' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'getSupportedLanguages' => array(
+              'path' => 'v3/{+parent}/supportedLanguages',
               'httpMethod' => 'GET',
               'parameters' => array(
-                'q' => array(
+                'parent' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'model' => array(
                   'location' => 'query',
                   'type' => 'string',
-                  'repeated' => true,
+                ),
+                'displayLanguageCode' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),'translateText' => array(
+              'path' => 'v3/{+parent}:translateText',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'parent' => array(
+                  'location' => 'path',
+                  'type' => 'string',
                   'required' => true,
                 ),
               ),
@@ -70,58 +105,224 @@ class Google_Service_Translate extends Google_Service
           )
         )
     );
-    $this->languages = new Google_Service_Translate_Resource_Languages(
+    $this->projects_locations = new Google_Service_Translate_Resource_ProjectsLocations(
         $this,
         $this->serviceName,
-        'languages',
+        'locations',
         array(
           'methods' => array(
-            'list' => array(
-              'path' => 'v2/languages',
+            'batchTranslateText' => array(
+              'path' => 'v3/{+parent}:batchTranslateText',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'parent' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'detectLanguage' => array(
+              'path' => 'v3/{+parent}:detectLanguage',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'parent' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'get' => array(
+              'path' => 'v3/{+name}',
               'httpMethod' => 'GET',
               'parameters' => array(
-                'target' => array(
+                'name' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'getSupportedLanguages' => array(
+              'path' => 'v3/{+parent}/supportedLanguages',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'parent' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'model' => array(
                   'location' => 'query',
                   'type' => 'string',
+                ),
+                'displayLanguageCode' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),'list' => array(
+              'path' => 'v3/{+name}/locations',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'name' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+                'filter' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),'translateText' => array(
+              'path' => 'v3/{+parent}:translateText',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'parent' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
                 ),
               ),
             ),
           )
         )
     );
-    $this->translations = new Google_Service_Translate_Resource_Translations(
+    $this->projects_locations_glossaries = new Google_Service_Translate_Resource_ProjectsLocationsGlossaries(
         $this,
         $this->serviceName,
-        'translations',
+        'glossaries',
         array(
           'methods' => array(
-            'list' => array(
-              'path' => 'v2',
+            'create' => array(
+              'path' => 'v3/{+parent}/glossaries',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'parent' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'delete' => array(
+              'path' => 'v3/{+name}',
+              'httpMethod' => 'DELETE',
+              'parameters' => array(
+                'name' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'get' => array(
+              'path' => 'v3/{+name}',
               'httpMethod' => 'GET',
               'parameters' => array(
-                'q' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                  'repeated' => true,
-                  'required' => true,
-                ),
-                'target' => array(
-                  'location' => 'query',
+                'name' => array(
+                  'location' => 'path',
                   'type' => 'string',
                   'required' => true,
                 ),
-                'cid' => array(
-                  'location' => 'query',
+              ),
+            ),'list' => array(
+              'path' => 'v3/{+parent}/glossaries',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'parent' => array(
+                  'location' => 'path',
                   'type' => 'string',
-                  'repeated' => true,
+                  'required' => true,
                 ),
-                'format' => array(
+                'filter' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'source' => array(
+                'pageToken' => array(
                   'location' => 'query',
                   'type' => 'string',
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->projects_locations_operations = new Google_Service_Translate_Resource_ProjectsLocationsOperations(
+        $this,
+        $this->serviceName,
+        'operations',
+        array(
+          'methods' => array(
+            'cancel' => array(
+              'path' => 'v3/{+name}:cancel',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'name' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'delete' => array(
+              'path' => 'v3/{+name}',
+              'httpMethod' => 'DELETE',
+              'parameters' => array(
+                'name' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'get' => array(
+              'path' => 'v3/{+name}',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'name' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'list' => array(
+              'path' => 'v3/{+name}/operations',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'name' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+                'filter' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),'wait' => array(
+              'path' => 'v3/{+name}:wait',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'name' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
                 ),
               ),
             ),

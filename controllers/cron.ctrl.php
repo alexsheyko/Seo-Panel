@@ -529,31 +529,53 @@ class CronController extends Controller {
 		$websiteInfo = $this->websiteInfo;
 		
 		// check whether old reports are not generated. Then generate from it.
-		for ($i=4; $i>=2; $i--) {
-		
+		//for ($i=4; $i>=2; $i--) {
+		for ($i=5; $i>=2; $i--) {
+
 			// report date should be less than 2 days, then only reports will be generated
 			$reportDate = date('Y-m-d', $this->timeStamp - ($i * 60 * 60 * 24));
-			
+
+			$result_status = false;
+			$msg = '';
 			// loop through source list
 			foreach ($wmCtrler->sourceList as $source) {
 				
-				// check whether reports already existing 
-				if (SP_MULTIPLE_CRON_EXEC && $wmCtrler->isReportsExists($websiteInfo['id'], $reportDate, $source)) {
-					$this->debugMsg("Skip webmaster tools report($reportDate) generation of <b>{$this->websiteInfo['name']}</b>.....<br>\n");
+				$today=true;
+				// check whether reports already existing
+				if (SP_MULTIPLE_CRON_EXEC
+				    && $wmCtrler->isReportsExists($websiteInfo['id'], $reportDate, $source, $today)) {
+
+					$this->debugMsg("Skip webmaster tools report($reportDate) generation of
+					                <b>{$this->websiteInfo['name']}</b>.....<br>\n");
 					continue;
 				}
 				
 				// store results
-				$wmCtrler->storeWebsiteAnalytics($websiteInfo['id'], $reportDate, $source);
+				$result = $wmCtrler->storeWebsiteAnalytics($websiteInfo['id'], $reportDate, $source);
+				if ($result['status']){
+				    $result_status = true;
+				}else{
+				    $msg = $result['msg'];
+				    break;
+                }
 			}		
-	
-			$this->debugMsg("Saved webmaster tools report($reportDate) of <b>{$this->websiteInfo['name']}</b>.....<br>\n");
+
+	        if ($result_status){
+			    $this->debugMsg("Saved webmaster tools report($reportDate) of <b>{$this->websiteInfo['name']}</b>.....<br>\n");
+            }else{
+                $this->debugMsg($msg."\n");
+                break;
+            }
 		}
 		
 		// update webmaster tools sitemaps
 		$websiteController = New WebsiteController();
-		$websiteController->importWebmasterToolsSitemaps($websiteId, true);
-		$this->debugMsg("Saved webmaster tools sitemaps of <b>{$this->websiteInfo['name']}</b>.....<br>\n");		
+		$return = $websiteController->importWebmasterToolsSitemaps($websiteId, true);
+		if ($return[0] == 'success') {
+		    $this->debugMsg("Saved webmaster tools sitemaps of <b>{$this->websiteInfo['name']}</b>.....<br>\n");
+        }else{
+            $this->debugMsg($return[0].' - '.$return[1]."\n");
+        }
 		
 	}	
 	

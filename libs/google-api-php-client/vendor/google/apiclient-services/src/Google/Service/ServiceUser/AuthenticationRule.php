@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016 Google Inc.
+ * Copyright 2014 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -33,18 +33,30 @@ class Google_Service_ServiceUser_AuthenticationRule extends Google_Collection
   {
     return $this->allowWithoutCredential;
   }
+  /**
+   * @param Google_Service_ServiceUser_OAuthRequirements
+   */
   public function setOauth(Google_Service_ServiceUser_OAuthRequirements $oauth)
   {
     $this->oauth = $oauth;
   }
+  /**
+   * @return Google_Service_ServiceUser_OAuthRequirements
+   */
   public function getOauth()
   {
     return $this->oauth;
   }
+  /**
+   * @param Google_Service_ServiceUser_AuthRequirement
+   */
   public function setRequirements($requirements)
   {
     $this->requirements = $requirements;
   }
+  /**
+   * @return Google_Service_ServiceUser_AuthRequirement
+   */
   public function getRequirements()
   {
     return $this->requirements;

@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016 Google Inc.
+ * Copyright 2014 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -26,17 +26,19 @@
 class Google_Service_YouTube_Resource_Sponsors extends Google_Service_Resource
 {
   /**
-   * Lists sponsors for a channel. (sponsors.listSponsors)
+   * Retrieves a list of sponsors that match the request criteria for a channel.
+   * (sponsors.listSponsors)
    *
-   * @param string $part The part parameter specifies the sponsor resource parts
-   * that the API response will include. Supported values are id and snippet.
+   * @param string|array $part The *part* parameter specifies the sponsor resource
+   * parts that the API response will include. Supported values are id and
+   * snippet.
    * @param array $optParams Optional parameters.
    *
-   * @opt_param string filter The filter parameter specifies which channel
-   * sponsors to return.
-   * @opt_param string maxResults The maxResults parameter specifies the maximum
+   * @opt_param string filter Parameter that specifies which channel sponsors to
+   * return.
+   * @opt_param string maxResults The *maxResults* parameter specifies the maximum
    * number of items that should be returned in the result set.
-   * @opt_param string pageToken The pageToken parameter identifies a specific
+   * @opt_param string pageToken The *pageToken* parameter identifies a specific
    * page in the result set that should be returned. In an API response, the
    * nextPageToken and prevPageToken properties identify other pages that could be
    * retrieved.

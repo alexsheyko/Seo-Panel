@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016 Google Inc.
+ * Copyright 2014 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -20,7 +20,6 @@ class Google_Service_YouTube_ChannelAuditDetails extends Google_Model
   public $communityGuidelinesGoodStanding;
   public $contentIdClaimsGoodStanding;
   public $copyrightStrikesGoodStanding;
-  public $overallGoodStanding;
 
   public function setCommunityGuidelinesGoodStanding($communityGuidelinesGoodStanding)
   {
@@ -45,13 +44,5 @@ class Google_Service_YouTube_ChannelAuditDetails extends Google_Model
   public function getCopyrightStrikesGoodStanding()
   {
     return $this->copyrightStrikesGoodStanding;
-  }
-  public function setOverallGoodStanding($overallGoodStanding)
-  {
-    $this->overallGoodStanding = $overallGoodStanding;
-  }
-  public function getOverallGoodStanding()
-  {
-    return $this->overallGoodStanding;
   }
 }

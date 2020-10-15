@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016 Google Inc.
+ * Copyright 2014 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -19,9 +19,9 @@
  * Service definition for Clouderrorreporting (v1beta1).
  *
  * <p>
- * Stackdriver Error Reporting groups and counts similar errors from cloud
- * services. The Stackdriver Error Reporting API provides a way to report new
- * errors and read access to error groups and their associated errors.</p>
+ * Groups and counts similar errors from cloud services and applications,
+ * reports new errors, and provides access to error groups and their associated
+ * errors.</p>
  *
  * <p>
  * For more information about this service, see the API
@@ -44,13 +44,15 @@ class Google_Service_Clouderrorreporting extends Google_Service
   /**
    * Constructs the internal representation of the Clouderrorreporting service.
    *
-   * @param Google_Client $client
+   * @param Google_Client $client The client used to deliver requests.
+   * @param string $rootUrl The root URL used for requests to the service.
    */
-  public function __construct(Google_Client $client)
+  public function __construct(Google_Client $client, $rootUrl = null)
   {
     parent::__construct($client);
-    $this->rootUrl = 'https://clouderrorreporting.googleapis.com/';
+    $this->rootUrl = $rootUrl ?: 'https://clouderrorreporting.googleapis.com/';
     $this->servicePath = '';
+    $this->batchPath = 'batch';
     $this->version = 'v1beta1';
     $this->serviceName = 'clouderrorreporting';
 
@@ -89,21 +91,21 @@ class Google_Service_Clouderrorreporting extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'groupId' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
                 'pageToken' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'serviceFilter.service' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
                 'pageSize' => array(
                   'location' => 'query',
                   'type' => 'integer',
+                ),
+                'groupId' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'serviceFilter.service' => array(
+                  'location' => 'query',
+                  'type' => 'string',
                 ),
                 'serviceFilter.version' => array(
                   'location' => 'query',
@@ -147,36 +149,11 @@ class Google_Service_Clouderrorreporting extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'timedCountDuration' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
                 'pageToken' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'timeRange.period' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'alignment' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'groupId' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                  'repeated' => true,
-                ),
-                'serviceFilter.service' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'pageSize' => array(
-                  'location' => 'query',
-                  'type' => 'integer',
-                ),
-                'serviceFilter.version' => array(
+                'alignmentTime' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -188,7 +165,32 @@ class Google_Service_Clouderrorreporting extends Google_Service
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'alignmentTime' => array(
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+                'groupId' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                  'repeated' => true,
+                ),
+                'serviceFilter.version' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'serviceFilter.service' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'timedCountDuration' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'timeRange.period' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'alignment' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),

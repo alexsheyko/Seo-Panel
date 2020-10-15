@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016 Google Inc.
+ * Copyright 2014 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -19,7 +19,9 @@ class Google_Service_YouTube_ChannelStatus extends Google_Model
 {
   public $isLinked;
   public $longUploadsStatus;
+  public $madeForKids;
   public $privacyStatus;
+  public $selfDeclaredMadeForKids;
 
   public function setIsLinked($isLinked)
   {
@@ -37,6 +39,14 @@ class Google_Service_YouTube_ChannelStatus extends Google_Model
   {
     return $this->longUploadsStatus;
   }
+  public function setMadeForKids($madeForKids)
+  {
+    $this->madeForKids = $madeForKids;
+  }
+  public function getMadeForKids()
+  {
+    return $this->madeForKids;
+  }
   public function setPrivacyStatus($privacyStatus)
   {
     $this->privacyStatus = $privacyStatus;
@@ -44,5 +54,13 @@ class Google_Service_YouTube_ChannelStatus extends Google_Model
   public function getPrivacyStatus()
   {
     return $this->privacyStatus;
+  }
+  public function setSelfDeclaredMadeForKids($selfDeclaredMadeForKids)
+  {
+    $this->selfDeclaredMadeForKids = $selfDeclaredMadeForKids;
+  }
+  public function getSelfDeclaredMadeForKids()
+  {
+    return $this->selfDeclaredMadeForKids;
   }
 }

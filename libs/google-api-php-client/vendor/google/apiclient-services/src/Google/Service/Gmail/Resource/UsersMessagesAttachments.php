@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016 Google Inc.
+ * Copyright 2014 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -28,7 +28,7 @@ class Google_Service_Gmail_Resource_UsersMessagesAttachments extends Google_Serv
   /**
    * Gets the specified message attachment. (attachments.get)
    *
-   * @param string $userId The user's email address. The special value me can be
+   * @param string $userId The user's email address. The special value `me` can be
    * used to indicate the authenticated user.
    * @param string $messageId The ID of the message containing the attachment.
    * @param string $id The ID of the attachment.

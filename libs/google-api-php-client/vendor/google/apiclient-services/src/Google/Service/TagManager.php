@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016 Google Inc.
+ * Copyright 2014 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,14 +16,14 @@
  */
 
 /**
- * Service definition for TagManager (v1).
+ * Service definition for TagManager (v2).
  *
  * <p>
- * Accesses Tag Manager accounts and containers.</p>
+ * This API allows clients to access and modify container and tag configuration.</p>
  *
  * <p>
  * For more information about this service, see the API
- * <a href="https://developers.google.com/tag-manager/api/v1/" target="_blank">Documentation</a>
+ * <a href="https://developers.google.com/tag-manager" target="_blank">Documentation</a>
  * </p>
  *
  * @author Google, Inc.
@@ -55,27 +55,31 @@ class Google_Service_TagManager extends Google_Service
   public $accounts;
   public $accounts_containers;
   public $accounts_containers_environments;
-  public $accounts_containers_folders;
-  public $accounts_containers_folders_entities;
-  public $accounts_containers_move_folders;
-  public $accounts_containers_reauthorize_environments;
-  public $accounts_containers_tags;
-  public $accounts_containers_triggers;
-  public $accounts_containers_variables;
+  public $accounts_containers_version_headers;
   public $accounts_containers_versions;
-  public $accounts_permissions;
+  public $accounts_containers_workspaces;
+  public $accounts_containers_workspaces_built_in_variables;
+  public $accounts_containers_workspaces_folders;
+  public $accounts_containers_workspaces_tags;
+  public $accounts_containers_workspaces_templates;
+  public $accounts_containers_workspaces_triggers;
+  public $accounts_containers_workspaces_variables;
+  public $accounts_containers_workspaces_zones;
+  public $accounts_user_permissions;
   
   /**
    * Constructs the internal representation of the TagManager service.
    *
-   * @param Google_Client $client
+   * @param Google_Client $client The client used to deliver requests.
+   * @param string $rootUrl The root URL used for requests to the service.
    */
-  public function __construct(Google_Client $client)
+  public function __construct(Google_Client $client, $rootUrl = null)
   {
     parent::__construct($client);
-    $this->rootUrl = 'https://www.googleapis.com/';
-    $this->servicePath = 'tagmanager/v1/';
-    $this->version = 'v1';
+    $this->rootUrl = $rootUrl ?: 'https://tagmanager.googleapis.com/';
+    $this->servicePath = '';
+    $this->batchPath = 'batch';
+    $this->version = 'v2';
     $this->serviceName = 'tagmanager';
 
     $this->accounts = new Google_Service_TagManager_Resource_Accounts(
@@ -85,24 +89,29 @@ class Google_Service_TagManager extends Google_Service
         array(
           'methods' => array(
             'get' => array(
-              'path' => 'accounts/{accountId}',
+              'path' => 'tagmanager/v2/{+path}',
               'httpMethod' => 'GET',
               'parameters' => array(
-                'accountId' => array(
+                'path' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
                 ),
               ),
             ),'list' => array(
-              'path' => 'accounts',
+              'path' => 'tagmanager/v2/accounts',
               'httpMethod' => 'GET',
-              'parameters' => array(),
+              'parameters' => array(
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
             ),'update' => array(
-              'path' => 'accounts/{accountId}',
+              'path' => 'tagmanager/v2/{+path}',
               'httpMethod' => 'PUT',
               'parameters' => array(
-                'accountId' => array(
+                'path' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
@@ -123,65 +132,54 @@ class Google_Service_TagManager extends Google_Service
         array(
           'methods' => array(
             'create' => array(
-              'path' => 'accounts/{accountId}/containers',
+              'path' => 'tagmanager/v2/{+parent}/containers',
               'httpMethod' => 'POST',
               'parameters' => array(
-                'accountId' => array(
+                'parent' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
                 ),
               ),
             ),'delete' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}',
+              'path' => 'tagmanager/v2/{+path}',
               'httpMethod' => 'DELETE',
               'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
+                'path' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
                 ),
               ),
             ),'get' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}',
+              'path' => 'tagmanager/v2/{+path}',
               'httpMethod' => 'GET',
               'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
+                'path' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
                 ),
               ),
             ),'list' => array(
-              'path' => 'accounts/{accountId}/containers',
+              'path' => 'tagmanager/v2/{+parent}/containers',
               'httpMethod' => 'GET',
               'parameters' => array(
-                'accountId' => array(
+                'parent' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
                 ),
               ),
             ),'update' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}',
+              'path' => 'tagmanager/v2/{+path}',
               'httpMethod' => 'PUT',
               'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
+                'path' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
@@ -202,218 +200,64 @@ class Google_Service_TagManager extends Google_Service
         array(
           'methods' => array(
             'create' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/environments',
+              'path' => 'tagmanager/v2/{+parent}/environments',
               'httpMethod' => 'POST',
               'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
+                'parent' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
                 ),
               ),
             ),'delete' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/environments/{environmentId}',
+              'path' => 'tagmanager/v2/{+path}',
               'httpMethod' => 'DELETE',
               'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'environmentId' => array(
+                'path' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
                 ),
               ),
             ),'get' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/environments/{environmentId}',
+              'path' => 'tagmanager/v2/{+path}',
               'httpMethod' => 'GET',
               'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'environmentId' => array(
+                'path' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
                 ),
               ),
             ),'list' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/environments',
+              'path' => 'tagmanager/v2/{+parent}/environments',
               'httpMethod' => 'GET',
               'parameters' => array(
-                'accountId' => array(
+                'parent' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
                 ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-              ),
-            ),'patch' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/environments/{environmentId}',
-              'httpMethod' => 'PATCH',
-              'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'environmentId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'fingerprint' => array(
+                'pageToken' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
               ),
-            ),'update' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/environments/{environmentId}',
-              'httpMethod' => 'PUT',
-              'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'environmentId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'fingerprint' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-              ),
-            ),
-          )
-        )
-    );
-    $this->accounts_containers_folders = new Google_Service_TagManager_Resource_AccountsContainersFolders(
-        $this,
-        $this->serviceName,
-        'folders',
-        array(
-          'methods' => array(
-            'create' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/folders',
+            ),'reauthorize' => array(
+              'path' => 'tagmanager/v2/{+path}:reauthorize',
               'httpMethod' => 'POST',
               'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-              ),
-            ),'delete' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/folders/{folderId}',
-              'httpMethod' => 'DELETE',
-              'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'folderId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-              ),
-            ),'get' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/folders/{folderId}',
-              'httpMethod' => 'GET',
-              'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'folderId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-              ),
-            ),'list' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/folders',
-              'httpMethod' => 'GET',
-              'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
+                'path' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
                 ),
               ),
             ),'update' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/folders/{folderId}',
+              'path' => 'tagmanager/v2/{+path}',
               'httpMethod' => 'PUT',
               'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'folderId' => array(
+                'path' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
@@ -427,415 +271,36 @@ class Google_Service_TagManager extends Google_Service
           )
         )
     );
-    $this->accounts_containers_folders_entities = new Google_Service_TagManager_Resource_AccountsContainersFoldersEntities(
+    $this->accounts_containers_version_headers = new Google_Service_TagManager_Resource_AccountsContainersVersionHeaders(
         $this,
         $this->serviceName,
-        'entities',
+        'version_headers',
         array(
           'methods' => array(
-            'list' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/folders/{folderId}/entities',
+            'latest' => array(
+              'path' => 'tagmanager/v2/{+parent}/version_headers:latest',
               'httpMethod' => 'GET',
               'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'folderId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-              ),
-            ),
-          )
-        )
-    );
-    $this->accounts_containers_move_folders = new Google_Service_TagManager_Resource_AccountsContainersMoveFolders(
-        $this,
-        $this->serviceName,
-        'move_folders',
-        array(
-          'methods' => array(
-            'update' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/move_folders/{folderId}',
-              'httpMethod' => 'PUT',
-              'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'folderId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'tagId' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                  'repeated' => true,
-                ),
-                'triggerId' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                  'repeated' => true,
-                ),
-                'variableId' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                  'repeated' => true,
-                ),
-              ),
-            ),
-          )
-        )
-    );
-    $this->accounts_containers_reauthorize_environments = new Google_Service_TagManager_Resource_AccountsContainersReauthorizeEnvironments(
-        $this,
-        $this->serviceName,
-        'reauthorize_environments',
-        array(
-          'methods' => array(
-            'update' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/reauthorize_environments/{environmentId}',
-              'httpMethod' => 'PUT',
-              'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'environmentId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-              ),
-            ),
-          )
-        )
-    );
-    $this->accounts_containers_tags = new Google_Service_TagManager_Resource_AccountsContainersTags(
-        $this,
-        $this->serviceName,
-        'tags',
-        array(
-          'methods' => array(
-            'create' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/tags',
-              'httpMethod' => 'POST',
-              'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-              ),
-            ),'delete' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/tags/{tagId}',
-              'httpMethod' => 'DELETE',
-              'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'tagId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-              ),
-            ),'get' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/tags/{tagId}',
-              'httpMethod' => 'GET',
-              'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'tagId' => array(
+                'parent' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
                 ),
               ),
             ),'list' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/tags',
+              'path' => 'tagmanager/v2/{+parent}/version_headers',
               'httpMethod' => 'GET',
               'parameters' => array(
-                'accountId' => array(
+                'parent' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
                 ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-              ),
-            ),'update' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/tags/{tagId}',
-              'httpMethod' => 'PUT',
-              'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'tagId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'fingerprint' => array(
+                'includeDeleted' => array(
                   'location' => 'query',
-                  'type' => 'string',
+                  'type' => 'boolean',
                 ),
-              ),
-            ),
-          )
-        )
-    );
-    $this->accounts_containers_triggers = new Google_Service_TagManager_Resource_AccountsContainersTriggers(
-        $this,
-        $this->serviceName,
-        'triggers',
-        array(
-          'methods' => array(
-            'create' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/triggers',
-              'httpMethod' => 'POST',
-              'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-              ),
-            ),'delete' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/triggers/{triggerId}',
-              'httpMethod' => 'DELETE',
-              'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'triggerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-              ),
-            ),'get' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/triggers/{triggerId}',
-              'httpMethod' => 'GET',
-              'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'triggerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-              ),
-            ),'list' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/triggers',
-              'httpMethod' => 'GET',
-              'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-              ),
-            ),'update' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/triggers/{triggerId}',
-              'httpMethod' => 'PUT',
-              'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'triggerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'fingerprint' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-              ),
-            ),
-          )
-        )
-    );
-    $this->accounts_containers_variables = new Google_Service_TagManager_Resource_AccountsContainersVariables(
-        $this,
-        $this->serviceName,
-        'variables',
-        array(
-          'methods' => array(
-            'create' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/variables',
-              'httpMethod' => 'POST',
-              'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-              ),
-            ),'delete' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/variables/{variableId}',
-              'httpMethod' => 'DELETE',
-              'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'variableId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-              ),
-            ),'get' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/variables/{variableId}',
-              'httpMethod' => 'GET',
-              'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'variableId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-              ),
-            ),'list' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/variables',
-              'httpMethod' => 'GET',
-              'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-              ),
-            ),'update' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/variables/{variableId}',
-              'httpMethod' => 'PUT',
-              'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'variableId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'fingerprint' => array(
+                'pageToken' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -850,99 +315,45 @@ class Google_Service_TagManager extends Google_Service
         'versions',
         array(
           'methods' => array(
-            'create' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/versions',
-              'httpMethod' => 'POST',
-              'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-              ),
-            ),'delete' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/versions/{containerVersionId}',
+            'delete' => array(
+              'path' => 'tagmanager/v2/{+path}',
               'httpMethod' => 'DELETE',
               'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerVersionId' => array(
+                'path' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
                 ),
               ),
             ),'get' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/versions/{containerVersionId}',
+              'path' => 'tagmanager/v2/{+path}',
               'httpMethod' => 'GET',
               'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
+                'path' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
                 ),
                 'containerVersionId' => array(
-                  'location' => 'path',
+                  'location' => 'query',
                   'type' => 'string',
-                  'required' => true,
                 ),
               ),
-            ),'list' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/versions',
+            ),'live' => array(
+              'path' => 'tagmanager/v2/{+parent}/versions:live',
               'httpMethod' => 'GET',
               'parameters' => array(
-                'accountId' => array(
+                'parent' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
-                ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'headers' => array(
-                  'location' => 'query',
-                  'type' => 'boolean',
-                ),
-                'includeDeleted' => array(
-                  'location' => 'query',
-                  'type' => 'boolean',
                 ),
               ),
             ),'publish' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/versions/{containerVersionId}/publish',
+              'path' => 'tagmanager/v2/{+path}:publish',
               'httpMethod' => 'POST',
               'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerVersionId' => array(
+                'path' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
@@ -952,61 +363,31 @@ class Google_Service_TagManager extends Google_Service
                   'type' => 'string',
                 ),
               ),
-            ),'restore' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/versions/{containerVersionId}/restore',
+            ),'set_latest' => array(
+              'path' => 'tagmanager/v2/{+path}:set_latest',
               'httpMethod' => 'POST',
               'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerVersionId' => array(
+                'path' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
                 ),
               ),
             ),'undelete' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/versions/{containerVersionId}/undelete',
+              'path' => 'tagmanager/v2/{+path}:undelete',
               'httpMethod' => 'POST',
               'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerVersionId' => array(
+                'path' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
                 ),
               ),
             ),'update' => array(
-              'path' => 'accounts/{accountId}/containers/{containerId}/versions/{containerVersionId}',
+              'path' => 'tagmanager/v2/{+path}',
               'httpMethod' => 'PUT',
               'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'containerVersionId' => array(
+                'path' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
@@ -1020,72 +401,782 @@ class Google_Service_TagManager extends Google_Service
           )
         )
     );
-    $this->accounts_permissions = new Google_Service_TagManager_Resource_AccountsPermissions(
+    $this->accounts_containers_workspaces = new Google_Service_TagManager_Resource_AccountsContainersWorkspaces(
         $this,
         $this->serviceName,
-        'permissions',
+        'workspaces',
         array(
           'methods' => array(
             'create' => array(
-              'path' => 'accounts/{accountId}/permissions',
+              'path' => 'tagmanager/v2/{+parent}/workspaces',
               'httpMethod' => 'POST',
               'parameters' => array(
-                'accountId' => array(
+                'parent' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'create_version' => array(
+              'path' => 'tagmanager/v2/{+path}:create_version',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'path' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
                 ),
               ),
             ),'delete' => array(
-              'path' => 'accounts/{accountId}/permissions/{permissionId}',
+              'path' => 'tagmanager/v2/{+path}',
               'httpMethod' => 'DELETE',
               'parameters' => array(
-                'accountId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'permissionId' => array(
+                'path' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
                 ),
               ),
             ),'get' => array(
-              'path' => 'accounts/{accountId}/permissions/{permissionId}',
+              'path' => 'tagmanager/v2/{+path}',
               'httpMethod' => 'GET',
               'parameters' => array(
-                'accountId' => array(
+                'path' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
                 ),
-                'permissionId' => array(
+              ),
+            ),'getStatus' => array(
+              'path' => 'tagmanager/v2/{+path}/status',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'path' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
                 ),
               ),
             ),'list' => array(
-              'path' => 'accounts/{accountId}/permissions',
+              'path' => 'tagmanager/v2/{+parent}/workspaces',
               'httpMethod' => 'GET',
               'parameters' => array(
-                'accountId' => array(
+                'parent' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),'quick_preview' => array(
+              'path' => 'tagmanager/v2/{+path}:quick_preview',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'path' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'resolve_conflict' => array(
+              'path' => 'tagmanager/v2/{+path}:resolve_conflict',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'path' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'fingerprint' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),'sync' => array(
+              'path' => 'tagmanager/v2/{+path}:sync',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'path' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
                 ),
               ),
             ),'update' => array(
-              'path' => 'accounts/{accountId}/permissions/{permissionId}',
+              'path' => 'tagmanager/v2/{+path}',
               'httpMethod' => 'PUT',
               'parameters' => array(
-                'accountId' => array(
+                'path' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
                 ),
-                'permissionId' => array(
+                'fingerprint' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->accounts_containers_workspaces_built_in_variables = new Google_Service_TagManager_Resource_AccountsContainersWorkspacesBuiltInVariables(
+        $this,
+        $this->serviceName,
+        'built_in_variables',
+        array(
+          'methods' => array(
+            'create' => array(
+              'path' => 'tagmanager/v2/{+parent}/built_in_variables',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'parent' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'type' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                  'repeated' => true,
+                ),
+              ),
+            ),'delete' => array(
+              'path' => 'tagmanager/v2/{+path}',
+              'httpMethod' => 'DELETE',
+              'parameters' => array(
+                'path' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'type' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                  'repeated' => true,
+                ),
+              ),
+            ),'list' => array(
+              'path' => 'tagmanager/v2/{+parent}/built_in_variables',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'parent' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),'revert' => array(
+              'path' => 'tagmanager/v2/{+path}/built_in_variables:revert',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'path' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'type' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->accounts_containers_workspaces_folders = new Google_Service_TagManager_Resource_AccountsContainersWorkspacesFolders(
+        $this,
+        $this->serviceName,
+        'folders',
+        array(
+          'methods' => array(
+            'create' => array(
+              'path' => 'tagmanager/v2/{+parent}/folders',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'parent' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'delete' => array(
+              'path' => 'tagmanager/v2/{+path}',
+              'httpMethod' => 'DELETE',
+              'parameters' => array(
+                'path' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'entities' => array(
+              'path' => 'tagmanager/v2/{+path}:entities',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'path' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),'get' => array(
+              'path' => 'tagmanager/v2/{+path}',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'path' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'list' => array(
+              'path' => 'tagmanager/v2/{+parent}/folders',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'parent' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),'move_entities_to_folder' => array(
+              'path' => 'tagmanager/v2/{+path}:move_entities_to_folder',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'path' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'variableId' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                  'repeated' => true,
+                ),
+                'tagId' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                  'repeated' => true,
+                ),
+                'triggerId' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                  'repeated' => true,
+                ),
+              ),
+            ),'revert' => array(
+              'path' => 'tagmanager/v2/{+path}:revert',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'path' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'fingerprint' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),'update' => array(
+              'path' => 'tagmanager/v2/{+path}',
+              'httpMethod' => 'PUT',
+              'parameters' => array(
+                'path' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'fingerprint' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->accounts_containers_workspaces_tags = new Google_Service_TagManager_Resource_AccountsContainersWorkspacesTags(
+        $this,
+        $this->serviceName,
+        'tags',
+        array(
+          'methods' => array(
+            'create' => array(
+              'path' => 'tagmanager/v2/{+parent}/tags',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'parent' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'delete' => array(
+              'path' => 'tagmanager/v2/{+path}',
+              'httpMethod' => 'DELETE',
+              'parameters' => array(
+                'path' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'get' => array(
+              'path' => 'tagmanager/v2/{+path}',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'path' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'list' => array(
+              'path' => 'tagmanager/v2/{+parent}/tags',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'parent' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),'revert' => array(
+              'path' => 'tagmanager/v2/{+path}:revert',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'path' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'fingerprint' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),'update' => array(
+              'path' => 'tagmanager/v2/{+path}',
+              'httpMethod' => 'PUT',
+              'parameters' => array(
+                'path' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'fingerprint' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->accounts_containers_workspaces_templates = new Google_Service_TagManager_Resource_AccountsContainersWorkspacesTemplates(
+        $this,
+        $this->serviceName,
+        'templates',
+        array(
+          'methods' => array(
+            'create' => array(
+              'path' => 'tagmanager/v2/{+parent}/templates',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'parent' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'delete' => array(
+              'path' => 'tagmanager/v2/{+path}',
+              'httpMethod' => 'DELETE',
+              'parameters' => array(
+                'path' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'get' => array(
+              'path' => 'tagmanager/v2/{+path}',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'path' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'list' => array(
+              'path' => 'tagmanager/v2/{+parent}/templates',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'parent' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),'revert' => array(
+              'path' => 'tagmanager/v2/{+path}:revert',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'path' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'fingerprint' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),'update' => array(
+              'path' => 'tagmanager/v2/{+path}',
+              'httpMethod' => 'PUT',
+              'parameters' => array(
+                'path' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'fingerprint' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->accounts_containers_workspaces_triggers = new Google_Service_TagManager_Resource_AccountsContainersWorkspacesTriggers(
+        $this,
+        $this->serviceName,
+        'triggers',
+        array(
+          'methods' => array(
+            'create' => array(
+              'path' => 'tagmanager/v2/{+parent}/triggers',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'parent' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'delete' => array(
+              'path' => 'tagmanager/v2/{+path}',
+              'httpMethod' => 'DELETE',
+              'parameters' => array(
+                'path' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'get' => array(
+              'path' => 'tagmanager/v2/{+path}',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'path' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'list' => array(
+              'path' => 'tagmanager/v2/{+parent}/triggers',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'parent' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),'revert' => array(
+              'path' => 'tagmanager/v2/{+path}:revert',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'path' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'fingerprint' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),'update' => array(
+              'path' => 'tagmanager/v2/{+path}',
+              'httpMethod' => 'PUT',
+              'parameters' => array(
+                'path' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'fingerprint' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->accounts_containers_workspaces_variables = new Google_Service_TagManager_Resource_AccountsContainersWorkspacesVariables(
+        $this,
+        $this->serviceName,
+        'variables',
+        array(
+          'methods' => array(
+            'create' => array(
+              'path' => 'tagmanager/v2/{+parent}/variables',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'parent' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'delete' => array(
+              'path' => 'tagmanager/v2/{+path}',
+              'httpMethod' => 'DELETE',
+              'parameters' => array(
+                'path' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'get' => array(
+              'path' => 'tagmanager/v2/{+path}',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'path' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'list' => array(
+              'path' => 'tagmanager/v2/{+parent}/variables',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'parent' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),'revert' => array(
+              'path' => 'tagmanager/v2/{+path}:revert',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'path' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'fingerprint' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),'update' => array(
+              'path' => 'tagmanager/v2/{+path}',
+              'httpMethod' => 'PUT',
+              'parameters' => array(
+                'path' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'fingerprint' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->accounts_containers_workspaces_zones = new Google_Service_TagManager_Resource_AccountsContainersWorkspacesZones(
+        $this,
+        $this->serviceName,
+        'zones',
+        array(
+          'methods' => array(
+            'create' => array(
+              'path' => 'tagmanager/v2/{+parent}/zones',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'parent' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'delete' => array(
+              'path' => 'tagmanager/v2/{+path}',
+              'httpMethod' => 'DELETE',
+              'parameters' => array(
+                'path' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'get' => array(
+              'path' => 'tagmanager/v2/{+path}',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'path' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'list' => array(
+              'path' => 'tagmanager/v2/{+parent}/zones',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'parent' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),'revert' => array(
+              'path' => 'tagmanager/v2/{+path}:revert',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'path' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'fingerprint' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),'update' => array(
+              'path' => 'tagmanager/v2/{+path}',
+              'httpMethod' => 'PUT',
+              'parameters' => array(
+                'path' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'fingerprint' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->accounts_user_permissions = new Google_Service_TagManager_Resource_AccountsUserPermissions(
+        $this,
+        $this->serviceName,
+        'user_permissions',
+        array(
+          'methods' => array(
+            'create' => array(
+              'path' => 'tagmanager/v2/{+parent}/user_permissions',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'parent' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'delete' => array(
+              'path' => 'tagmanager/v2/{+path}',
+              'httpMethod' => 'DELETE',
+              'parameters' => array(
+                'path' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'get' => array(
+              'path' => 'tagmanager/v2/{+path}',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'path' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'list' => array(
+              'path' => 'tagmanager/v2/{+parent}/user_permissions',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'parent' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),'update' => array(
+              'path' => 'tagmanager/v2/{+path}',
+              'httpMethod' => 'PUT',
+              'parameters' => array(
+                'path' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,

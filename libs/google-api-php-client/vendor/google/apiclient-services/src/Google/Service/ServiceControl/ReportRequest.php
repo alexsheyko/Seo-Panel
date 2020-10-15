@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016 Google Inc.
+ * Copyright 2014 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,14 +18,20 @@
 class Google_Service_ServiceControl_ReportRequest extends Google_Collection
 {
   protected $collection_key = 'operations';
-  protected $operationsType = 'Google_Service_ServiceControl_Operation';
+  protected $operationsType = 'Google_Service_ServiceControl_AttributeContext';
   protected $operationsDataType = 'array';
   public $serviceConfigId;
 
+  /**
+   * @param Google_Service_ServiceControl_AttributeContext
+   */
   public function setOperations($operations)
   {
     $this->operations = $operations;
   }
+  /**
+   * @return Google_Service_ServiceControl_AttributeContext
+   */
   public function getOperations()
   {
     return $this->operations;

@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016 Google Inc.
+ * Copyright 2014 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -19,13 +19,13 @@
  * Service definition for Directory (directory_v1).
  *
  * <p>
- * The Admin SDK Directory API lets you view and manage enterprise resources
- * such as users and groups, administrative notifications, security features,
- * and more.</p>
+ * Admin SDK lets administrators of enterprise domains to view and manage
+ * resources like user, groups etc. It also provides audit and usage reports of
+ * domain.</p>
  *
  * <p>
  * For more information about this service, see the API
- * <a href="https://developers.google.com/admin-sdk/directory/" target="_blank">Documentation</a>
+ * <a href="http://developers.google.com/admin-sdk/" target="_blank">Documentation</a>
  * </p>
  *
  * @author Google, Inc.
@@ -71,9 +71,6 @@ class Google_Service_Directory extends Google_Service
   /** View groups on your domain. */
   const ADMIN_DIRECTORY_GROUP_READONLY =
       "https://www.googleapis.com/auth/admin.directory.group.readonly";
-  /** View and manage notifications received on your domain. */
-  const ADMIN_DIRECTORY_NOTIFICATIONS =
-      "https://www.googleapis.com/auth/admin.directory.notifications";
   /** View and manage organization units on your domain. */
   const ADMIN_DIRECTORY_ORGUNIT =
       "https://www.googleapis.com/auth/admin.directory.orgunit";
@@ -113,6 +110,9 @@ class Google_Service_Directory extends Google_Service
   /** View user schemas on your domain. */
   const ADMIN_DIRECTORY_USERSCHEMA_READONLY =
       "https://www.googleapis.com/auth/admin.directory.userschema.readonly";
+  /** View and manage your data across Google Cloud Platform services. */
+  const CLOUD_PLATFORM =
+      "https://www.googleapis.com/auth/cloud-platform";
 
   public $asps;
   public $channels;
@@ -124,14 +124,16 @@ class Google_Service_Directory extends Google_Service
   public $groups_aliases;
   public $members;
   public $mobiledevices;
-  public $notifications;
   public $orgunits;
   public $privileges;
+  public $resources_buildings;
   public $resources_calendars;
+  public $resources_features;
   public $roleAssignments;
   public $roles;
   public $schemas;
   public $tokens;
+  public $twoStepVerification;
   public $users;
   public $users_aliases;
   public $users_photos;
@@ -140,13 +142,15 @@ class Google_Service_Directory extends Google_Service
   /**
    * Constructs the internal representation of the Directory service.
    *
-   * @param Google_Client $client
+   * @param Google_Client $client The client used to deliver requests.
+   * @param string $rootUrl The root URL used for requests to the service.
    */
-  public function __construct(Google_Client $client)
+  public function __construct(Google_Client $client, $rootUrl = null)
   {
     parent::__construct($client);
-    $this->rootUrl = 'https://www.googleapis.com/';
-    $this->servicePath = 'admin/directory/v1/';
+    $this->rootUrl = $rootUrl ?: 'https://www.googleapis.com/';
+    $this->servicePath = '';
+    $this->batchPath = 'batch/admin/directory_v1';
     $this->version = 'directory_v1';
     $this->serviceName = 'admin';
 
@@ -157,7 +161,7 @@ class Google_Service_Directory extends Google_Service
         array(
           'methods' => array(
             'delete' => array(
-              'path' => 'users/{userKey}/asps/{codeId}',
+              'path' => 'admin/directory/v1/users/{userKey}/asps/{codeId}',
               'httpMethod' => 'DELETE',
               'parameters' => array(
                 'userKey' => array(
@@ -172,7 +176,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'get' => array(
-              'path' => 'users/{userKey}/asps/{codeId}',
+              'path' => 'admin/directory/v1/users/{userKey}/asps/{codeId}',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'userKey' => array(
@@ -187,7 +191,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'list' => array(
-              'path' => 'users/{userKey}/asps',
+              'path' => 'admin/directory/v1/users/{userKey}/asps',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'userKey' => array(
@@ -207,7 +211,7 @@ class Google_Service_Directory extends Google_Service
         array(
           'methods' => array(
             'stop' => array(
-              'path' => '/admin/directory_v1/channels/stop',
+              'path' => 'admin/directory_v1/channels/stop',
               'httpMethod' => 'POST',
               'parameters' => array(),
             ),
@@ -221,7 +225,7 @@ class Google_Service_Directory extends Google_Service
         array(
           'methods' => array(
             'action' => array(
-              'path' => 'customer/{customerId}/devices/chromeos/{resourceId}/action',
+              'path' => 'admin/directory/v1/customer/{customerId}/devices/chromeos/{resourceId}/action',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'customerId' => array(
@@ -236,7 +240,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'get' => array(
-              'path' => 'customer/{customerId}/devices/chromeos/{deviceId}',
+              'path' => 'admin/directory/v1/customer/{customerId}/devices/chromeos/{deviceId}',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'customerId' => array(
@@ -255,13 +259,17 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'list' => array(
-              'path' => 'customer/{customerId}/devices/chromeos',
+              'path' => 'admin/directory/v1/customer/{customerId}/devices/chromeos',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'customerId' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
+                ),
+                'projection' => array(
+                  'location' => 'query',
+                  'type' => 'string',
                 ),
                 'maxResults' => array(
                   'location' => 'query',
@@ -275,7 +283,7 @@ class Google_Service_Directory extends Google_Service
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'projection' => array(
+                'orgUnitPath' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -288,8 +296,23 @@ class Google_Service_Directory extends Google_Service
                   'type' => 'string',
                 ),
               ),
+            ),'moveDevicesToOu' => array(
+              'path' => 'admin/directory/v1/customer/{customerId}/devices/chromeos/moveDevicesToOu',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'customerId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'orgUnitPath' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
             ),'patch' => array(
-              'path' => 'customer/{customerId}/devices/chromeos/{deviceId}',
+              'path' => 'admin/directory/v1/customer/{customerId}/devices/chromeos/{deviceId}',
               'httpMethod' => 'PATCH',
               'parameters' => array(
                 'customerId' => array(
@@ -308,7 +331,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'update' => array(
-              'path' => 'customer/{customerId}/devices/chromeos/{deviceId}',
+              'path' => 'admin/directory/v1/customer/{customerId}/devices/chromeos/{deviceId}',
               'httpMethod' => 'PUT',
               'parameters' => array(
                 'customerId' => array(
@@ -337,7 +360,7 @@ class Google_Service_Directory extends Google_Service
         array(
           'methods' => array(
             'get' => array(
-              'path' => 'customers/{customerKey}',
+              'path' => 'admin/directory/v1/customers/{customerKey}',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'customerKey' => array(
@@ -347,7 +370,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'patch' => array(
-              'path' => 'customers/{customerKey}',
+              'path' => 'admin/directory/v1/customers/{customerKey}',
               'httpMethod' => 'PATCH',
               'parameters' => array(
                 'customerKey' => array(
@@ -357,7 +380,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'update' => array(
-              'path' => 'customers/{customerKey}',
+              'path' => 'admin/directory/v1/customers/{customerKey}',
               'httpMethod' => 'PUT',
               'parameters' => array(
                 'customerKey' => array(
@@ -377,7 +400,7 @@ class Google_Service_Directory extends Google_Service
         array(
           'methods' => array(
             'delete' => array(
-              'path' => 'customer/{customer}/domainaliases/{domainAliasName}',
+              'path' => 'admin/directory/v1/customer/{customer}/domainaliases/{domainAliasName}',
               'httpMethod' => 'DELETE',
               'parameters' => array(
                 'customer' => array(
@@ -392,7 +415,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'get' => array(
-              'path' => 'customer/{customer}/domainaliases/{domainAliasName}',
+              'path' => 'admin/directory/v1/customer/{customer}/domainaliases/{domainAliasName}',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'customer' => array(
@@ -407,7 +430,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'insert' => array(
-              'path' => 'customer/{customer}/domainaliases',
+              'path' => 'admin/directory/v1/customer/{customer}/domainaliases',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'customer' => array(
@@ -417,7 +440,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'list' => array(
-              'path' => 'customer/{customer}/domainaliases',
+              'path' => 'admin/directory/v1/customer/{customer}/domainaliases',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'customer' => array(
@@ -441,7 +464,7 @@ class Google_Service_Directory extends Google_Service
         array(
           'methods' => array(
             'delete' => array(
-              'path' => 'customer/{customer}/domains/{domainName}',
+              'path' => 'admin/directory/v1/customer/{customer}/domains/{domainName}',
               'httpMethod' => 'DELETE',
               'parameters' => array(
                 'customer' => array(
@@ -456,7 +479,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'get' => array(
-              'path' => 'customer/{customer}/domains/{domainName}',
+              'path' => 'admin/directory/v1/customer/{customer}/domains/{domainName}',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'customer' => array(
@@ -471,7 +494,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'insert' => array(
-              'path' => 'customer/{customer}/domains',
+              'path' => 'admin/directory/v1/customer/{customer}/domains',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'customer' => array(
@@ -481,7 +504,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'list' => array(
-              'path' => 'customer/{customer}/domains',
+              'path' => 'admin/directory/v1/customer/{customer}/domains',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'customer' => array(
@@ -501,7 +524,7 @@ class Google_Service_Directory extends Google_Service
         array(
           'methods' => array(
             'delete' => array(
-              'path' => 'groups/{groupKey}',
+              'path' => 'admin/directory/v1/groups/{groupKey}',
               'httpMethod' => 'DELETE',
               'parameters' => array(
                 'groupKey' => array(
@@ -511,7 +534,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'get' => array(
-              'path' => 'groups/{groupKey}',
+              'path' => 'admin/directory/v1/groups/{groupKey}',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'groupKey' => array(
@@ -521,26 +544,14 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'insert' => array(
-              'path' => 'groups',
+              'path' => 'admin/directory/v1/groups',
               'httpMethod' => 'POST',
               'parameters' => array(),
             ),'list' => array(
-              'path' => 'groups',
+              'path' => 'admin/directory/v1/groups',
               'httpMethod' => 'GET',
               'parameters' => array(
-                'customer' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
                 'domain' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'maxResults' => array(
-                  'location' => 'query',
-                  'type' => 'integer',
-                ),
-                'pageToken' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -548,9 +559,33 @@ class Google_Service_Directory extends Google_Service
                   'location' => 'query',
                   'type' => 'string',
                 ),
+                'sortOrder' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'customer' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'orderBy' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'maxResults' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+                'query' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
               ),
             ),'patch' => array(
-              'path' => 'groups/{groupKey}',
+              'path' => 'admin/directory/v1/groups/{groupKey}',
               'httpMethod' => 'PATCH',
               'parameters' => array(
                 'groupKey' => array(
@@ -560,7 +595,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'update' => array(
-              'path' => 'groups/{groupKey}',
+              'path' => 'admin/directory/v1/groups/{groupKey}',
               'httpMethod' => 'PUT',
               'parameters' => array(
                 'groupKey' => array(
@@ -580,7 +615,7 @@ class Google_Service_Directory extends Google_Service
         array(
           'methods' => array(
             'delete' => array(
-              'path' => 'groups/{groupKey}/aliases/{alias}',
+              'path' => 'admin/directory/v1/groups/{groupKey}/aliases/{alias}',
               'httpMethod' => 'DELETE',
               'parameters' => array(
                 'groupKey' => array(
@@ -595,7 +630,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'insert' => array(
-              'path' => 'groups/{groupKey}/aliases',
+              'path' => 'admin/directory/v1/groups/{groupKey}/aliases',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'groupKey' => array(
@@ -605,7 +640,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'list' => array(
-              'path' => 'groups/{groupKey}/aliases',
+              'path' => 'admin/directory/v1/groups/{groupKey}/aliases',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'groupKey' => array(
@@ -625,7 +660,7 @@ class Google_Service_Directory extends Google_Service
         array(
           'methods' => array(
             'delete' => array(
-              'path' => 'groups/{groupKey}/members/{memberKey}',
+              'path' => 'admin/directory/v1/groups/{groupKey}/members/{memberKey}',
               'httpMethod' => 'DELETE',
               'parameters' => array(
                 'groupKey' => array(
@@ -640,7 +675,22 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'get' => array(
-              'path' => 'groups/{groupKey}/members/{memberKey}',
+              'path' => 'admin/directory/v1/groups/{groupKey}/members/{memberKey}',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'groupKey' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'memberKey' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'hasMember' => array(
+              'path' => 'admin/directory/v1/groups/{groupKey}/hasMember/{memberKey}',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'groupKey' => array(
@@ -655,7 +705,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'insert' => array(
-              'path' => 'groups/{groupKey}/members',
+              'path' => 'admin/directory/v1/groups/{groupKey}/members',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'groupKey' => array(
@@ -665,7 +715,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'list' => array(
-              'path' => 'groups/{groupKey}/members',
+              'path' => 'admin/directory/v1/groups/{groupKey}/members',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'groupKey' => array(
@@ -677,17 +727,21 @@ class Google_Service_Directory extends Google_Service
                   'location' => 'query',
                   'type' => 'integer',
                 ),
-                'pageToken' => array(
+                'roles' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'roles' => array(
+                'includeDerivedMembership' => array(
+                  'location' => 'query',
+                  'type' => 'boolean',
+                ),
+                'pageToken' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
               ),
             ),'patch' => array(
-              'path' => 'groups/{groupKey}/members/{memberKey}',
+              'path' => 'admin/directory/v1/groups/{groupKey}/members/{memberKey}',
               'httpMethod' => 'PATCH',
               'parameters' => array(
                 'groupKey' => array(
@@ -702,7 +756,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'update' => array(
-              'path' => 'groups/{groupKey}/members/{memberKey}',
+              'path' => 'admin/directory/v1/groups/{groupKey}/members/{memberKey}',
               'httpMethod' => 'PUT',
               'parameters' => array(
                 'groupKey' => array(
@@ -727,7 +781,7 @@ class Google_Service_Directory extends Google_Service
         array(
           'methods' => array(
             'action' => array(
-              'path' => 'customer/{customerId}/devices/mobile/{resourceId}/action',
+              'path' => 'admin/directory/v1/customer/{customerId}/devices/mobile/{resourceId}/action',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'customerId' => array(
@@ -742,7 +796,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'delete' => array(
-              'path' => 'customer/{customerId}/devices/mobile/{resourceId}',
+              'path' => 'admin/directory/v1/customer/{customerId}/devices/mobile/{resourceId}',
               'httpMethod' => 'DELETE',
               'parameters' => array(
                 'customerId' => array(
@@ -757,7 +811,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'get' => array(
-              'path' => 'customer/{customerId}/devices/mobile/{resourceId}',
+              'path' => 'admin/directory/v1/customer/{customerId}/devices/mobile/{resourceId}',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'customerId' => array(
@@ -776,7 +830,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'list' => array(
-              'path' => 'customer/{customerId}/devices/mobile',
+              'path' => 'admin/directory/v1/customer/{customerId}/devices/mobile',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'customerId' => array(
@@ -784,23 +838,7 @@ class Google_Service_Directory extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'maxResults' => array(
-                  'location' => 'query',
-                  'type' => 'integer',
-                ),
-                'orderBy' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
                 'pageToken' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'projection' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'query' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -808,57 +846,7 @@ class Google_Service_Directory extends Google_Service
                   'location' => 'query',
                   'type' => 'string',
                 ),
-              ),
-            ),
-          )
-        )
-    );
-    $this->notifications = new Google_Service_Directory_Resource_Notifications(
-        $this,
-        $this->serviceName,
-        'notifications',
-        array(
-          'methods' => array(
-            'delete' => array(
-              'path' => 'customer/{customer}/notifications/{notificationId}',
-              'httpMethod' => 'DELETE',
-              'parameters' => array(
-                'customer' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'notificationId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-              ),
-            ),'get' => array(
-              'path' => 'customer/{customer}/notifications/{notificationId}',
-              'httpMethod' => 'GET',
-              'parameters' => array(
-                'customer' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'notificationId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-              ),
-            ),'list' => array(
-              'path' => 'customer/{customer}/notifications',
-              'httpMethod' => 'GET',
-              'parameters' => array(
-                'customer' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'language' => array(
+                'orderBy' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -866,39 +854,13 @@ class Google_Service_Directory extends Google_Service
                   'location' => 'query',
                   'type' => 'integer',
                 ),
-                'pageToken' => array(
+                'query' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
-              ),
-            ),'patch' => array(
-              'path' => 'customer/{customer}/notifications/{notificationId}',
-              'httpMethod' => 'PATCH',
-              'parameters' => array(
-                'customer' => array(
-                  'location' => 'path',
+                'projection' => array(
+                  'location' => 'query',
                   'type' => 'string',
-                  'required' => true,
-                ),
-                'notificationId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-              ),
-            ),'update' => array(
-              'path' => 'customer/{customer}/notifications/{notificationId}',
-              'httpMethod' => 'PUT',
-              'parameters' => array(
-                'customer' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'notificationId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
                 ),
               ),
             ),
@@ -912,7 +874,7 @@ class Google_Service_Directory extends Google_Service
         array(
           'methods' => array(
             'delete' => array(
-              'path' => 'customer/{customerId}/orgunits{/orgUnitPath*}',
+              'path' => 'admin/directory/v1/customer/{customerId}/orgunits/{+orgUnitPath}',
               'httpMethod' => 'DELETE',
               'parameters' => array(
                 'customerId' => array(
@@ -923,12 +885,11 @@ class Google_Service_Directory extends Google_Service
                 'orgUnitPath' => array(
                   'location' => 'path',
                   'type' => 'string',
-                  'repeated' => true,
                   'required' => true,
                 ),
               ),
             ),'get' => array(
-              'path' => 'customer/{customerId}/orgunits{/orgUnitPath*}',
+              'path' => 'admin/directory/v1/customer/{customerId}/orgunits/{+orgUnitPath}',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'customerId' => array(
@@ -939,12 +900,11 @@ class Google_Service_Directory extends Google_Service
                 'orgUnitPath' => array(
                   'location' => 'path',
                   'type' => 'string',
-                  'repeated' => true,
                   'required' => true,
                 ),
               ),
             ),'insert' => array(
-              'path' => 'customer/{customerId}/orgunits',
+              'path' => 'admin/directory/v1/customer/{customerId}/orgunits',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'customerId' => array(
@@ -954,7 +914,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'list' => array(
-              'path' => 'customer/{customerId}/orgunits',
+              'path' => 'admin/directory/v1/customer/{customerId}/orgunits',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'customerId' => array(
@@ -962,17 +922,17 @@ class Google_Service_Directory extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'orgUnitPath' => array(
+                'type' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'type' => array(
+                'orgUnitPath' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
               ),
             ),'patch' => array(
-              'path' => 'customer/{customerId}/orgunits{/orgUnitPath*}',
+              'path' => 'admin/directory/v1/customer/{customerId}/orgunits/{+orgUnitPath}',
               'httpMethod' => 'PATCH',
               'parameters' => array(
                 'customerId' => array(
@@ -983,12 +943,11 @@ class Google_Service_Directory extends Google_Service
                 'orgUnitPath' => array(
                   'location' => 'path',
                   'type' => 'string',
-                  'repeated' => true,
                   'required' => true,
                 ),
               ),
             ),'update' => array(
-              'path' => 'customer/{customerId}/orgunits{/orgUnitPath*}',
+              'path' => 'admin/directory/v1/customer/{customerId}/orgunits/{+orgUnitPath}',
               'httpMethod' => 'PUT',
               'parameters' => array(
                 'customerId' => array(
@@ -999,7 +958,6 @@ class Google_Service_Directory extends Google_Service
                 'orgUnitPath' => array(
                   'location' => 'path',
                   'type' => 'string',
-                  'repeated' => true,
                   'required' => true,
                 ),
               ),
@@ -1014,13 +972,123 @@ class Google_Service_Directory extends Google_Service
         array(
           'methods' => array(
             'list' => array(
-              'path' => 'customer/{customer}/roles/ALL/privileges',
+              'path' => 'admin/directory/v1/customer/{customer}/roles/ALL/privileges',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'customer' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->resources_buildings = new Google_Service_Directory_Resource_ResourcesBuildings(
+        $this,
+        $this->serviceName,
+        'buildings',
+        array(
+          'methods' => array(
+            'delete' => array(
+              'path' => 'admin/directory/v1/customer/{customer}/resources/buildings/{buildingId}',
+              'httpMethod' => 'DELETE',
+              'parameters' => array(
+                'customer' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'buildingId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'get' => array(
+              'path' => 'admin/directory/v1/customer/{customer}/resources/buildings/{buildingId}',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'customer' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'buildingId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'insert' => array(
+              'path' => 'admin/directory/v1/customer/{customer}/resources/buildings',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'customer' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'coordinatesSource' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),'list' => array(
+              'path' => 'admin/directory/v1/customer/{customer}/resources/buildings',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'customer' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'maxResults' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+              ),
+            ),'patch' => array(
+              'path' => 'admin/directory/v1/customer/{customer}/resources/buildings/{buildingId}',
+              'httpMethod' => 'PATCH',
+              'parameters' => array(
+                'customer' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'buildingId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'coordinatesSource' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),'update' => array(
+              'path' => 'admin/directory/v1/customer/{customer}/resources/buildings/{buildingId}',
+              'httpMethod' => 'PUT',
+              'parameters' => array(
+                'customer' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'buildingId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'coordinatesSource' => array(
+                  'location' => 'query',
+                  'type' => 'string',
                 ),
               ),
             ),
@@ -1034,7 +1102,7 @@ class Google_Service_Directory extends Google_Service
         array(
           'methods' => array(
             'delete' => array(
-              'path' => 'customer/{customer}/resources/calendars/{calendarResourceId}',
+              'path' => 'admin/directory/v1/customer/{customer}/resources/calendars/{calendarResourceId}',
               'httpMethod' => 'DELETE',
               'parameters' => array(
                 'customer' => array(
@@ -1049,7 +1117,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'get' => array(
-              'path' => 'customer/{customer}/resources/calendars/{calendarResourceId}',
+              'path' => 'admin/directory/v1/customer/{customer}/resources/calendars/{calendarResourceId}',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'customer' => array(
@@ -1064,7 +1132,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'insert' => array(
-              'path' => 'customer/{customer}/resources/calendars',
+              'path' => 'admin/directory/v1/customer/{customer}/resources/calendars',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'customer' => array(
@@ -1074,7 +1142,113 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'list' => array(
-              'path' => 'customer/{customer}/resources/calendars',
+              'path' => 'admin/directory/v1/customer/{customer}/resources/calendars',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'customer' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'query' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'maxResults' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+                'orderBy' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),'patch' => array(
+              'path' => 'admin/directory/v1/customer/{customer}/resources/calendars/{calendarResourceId}',
+              'httpMethod' => 'PATCH',
+              'parameters' => array(
+                'customer' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'calendarResourceId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'update' => array(
+              'path' => 'admin/directory/v1/customer/{customer}/resources/calendars/{calendarResourceId}',
+              'httpMethod' => 'PUT',
+              'parameters' => array(
+                'customer' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'calendarResourceId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->resources_features = new Google_Service_Directory_Resource_ResourcesFeatures(
+        $this,
+        $this->serviceName,
+        'features',
+        array(
+          'methods' => array(
+            'delete' => array(
+              'path' => 'admin/directory/v1/customer/{customer}/resources/features/{featureKey}',
+              'httpMethod' => 'DELETE',
+              'parameters' => array(
+                'customer' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'featureKey' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'get' => array(
+              'path' => 'admin/directory/v1/customer/{customer}/resources/features/{featureKey}',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'customer' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'featureKey' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'insert' => array(
+              'path' => 'admin/directory/v1/customer/{customer}/resources/features',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'customer' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'list' => array(
+              'path' => 'admin/directory/v1/customer/{customer}/resources/features',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'customer' => array(
@@ -1092,7 +1266,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'patch' => array(
-              'path' => 'customer/{customer}/resources/calendars/{calendarResourceId}',
+              'path' => 'admin/directory/v1/customer/{customer}/resources/features/{featureKey}',
               'httpMethod' => 'PATCH',
               'parameters' => array(
                 'customer' => array(
@@ -1100,14 +1274,29 @@ class Google_Service_Directory extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'calendarResourceId' => array(
+                'featureKey' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'rename' => array(
+              'path' => 'admin/directory/v1/customer/{customer}/resources/features/{oldName}/rename',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'customer' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'oldName' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
                 ),
               ),
             ),'update' => array(
-              'path' => 'customer/{customer}/resources/calendars/{calendarResourceId}',
+              'path' => 'admin/directory/v1/customer/{customer}/resources/features/{featureKey}',
               'httpMethod' => 'PUT',
               'parameters' => array(
                 'customer' => array(
@@ -1115,7 +1304,7 @@ class Google_Service_Directory extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'calendarResourceId' => array(
+                'featureKey' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
@@ -1132,7 +1321,7 @@ class Google_Service_Directory extends Google_Service
         array(
           'methods' => array(
             'delete' => array(
-              'path' => 'customer/{customer}/roleassignments/{roleAssignmentId}',
+              'path' => 'admin/directory/v1/customer/{customer}/roleassignments/{roleAssignmentId}',
               'httpMethod' => 'DELETE',
               'parameters' => array(
                 'customer' => array(
@@ -1147,7 +1336,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'get' => array(
-              'path' => 'customer/{customer}/roleassignments/{roleAssignmentId}',
+              'path' => 'admin/directory/v1/customer/{customer}/roleassignments/{roleAssignmentId}',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'customer' => array(
@@ -1162,7 +1351,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'insert' => array(
-              'path' => 'customer/{customer}/roleassignments',
+              'path' => 'admin/directory/v1/customer/{customer}/roleassignments',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'customer' => array(
@@ -1172,7 +1361,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'list' => array(
-              'path' => 'customer/{customer}/roleassignments',
+              'path' => 'admin/directory/v1/customer/{customer}/roleassignments',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'customer' => array(
@@ -1180,19 +1369,19 @@ class Google_Service_Directory extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'maxResults' => array(
-                  'location' => 'query',
-                  'type' => 'integer',
-                ),
                 'pageToken' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'roleId' => array(
+                'maxResults' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+                'userKey' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'userKey' => array(
+                'roleId' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -1208,7 +1397,7 @@ class Google_Service_Directory extends Google_Service
         array(
           'methods' => array(
             'delete' => array(
-              'path' => 'customer/{customer}/roles/{roleId}',
+              'path' => 'admin/directory/v1/customer/{customer}/roles/{roleId}',
               'httpMethod' => 'DELETE',
               'parameters' => array(
                 'customer' => array(
@@ -1223,7 +1412,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'get' => array(
-              'path' => 'customer/{customer}/roles/{roleId}',
+              'path' => 'admin/directory/v1/customer/{customer}/roles/{roleId}',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'customer' => array(
@@ -1238,7 +1427,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'insert' => array(
-              'path' => 'customer/{customer}/roles',
+              'path' => 'admin/directory/v1/customer/{customer}/roles',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'customer' => array(
@@ -1248,7 +1437,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'list' => array(
-              'path' => 'customer/{customer}/roles',
+              'path' => 'admin/directory/v1/customer/{customer}/roles',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'customer' => array(
@@ -1266,7 +1455,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'patch' => array(
-              'path' => 'customer/{customer}/roles/{roleId}',
+              'path' => 'admin/directory/v1/customer/{customer}/roles/{roleId}',
               'httpMethod' => 'PATCH',
               'parameters' => array(
                 'customer' => array(
@@ -1281,7 +1470,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'update' => array(
-              'path' => 'customer/{customer}/roles/{roleId}',
+              'path' => 'admin/directory/v1/customer/{customer}/roles/{roleId}',
               'httpMethod' => 'PUT',
               'parameters' => array(
                 'customer' => array(
@@ -1306,7 +1495,7 @@ class Google_Service_Directory extends Google_Service
         array(
           'methods' => array(
             'delete' => array(
-              'path' => 'customer/{customerId}/schemas/{schemaKey}',
+              'path' => 'admin/directory/v1/customer/{customerId}/schemas/{schemaKey}',
               'httpMethod' => 'DELETE',
               'parameters' => array(
                 'customerId' => array(
@@ -1321,7 +1510,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'get' => array(
-              'path' => 'customer/{customerId}/schemas/{schemaKey}',
+              'path' => 'admin/directory/v1/customer/{customerId}/schemas/{schemaKey}',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'customerId' => array(
@@ -1336,7 +1525,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'insert' => array(
-              'path' => 'customer/{customerId}/schemas',
+              'path' => 'admin/directory/v1/customer/{customerId}/schemas',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'customerId' => array(
@@ -1346,7 +1535,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'list' => array(
-              'path' => 'customer/{customerId}/schemas',
+              'path' => 'admin/directory/v1/customer/{customerId}/schemas',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'customerId' => array(
@@ -1356,7 +1545,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'patch' => array(
-              'path' => 'customer/{customerId}/schemas/{schemaKey}',
+              'path' => 'admin/directory/v1/customer/{customerId}/schemas/{schemaKey}',
               'httpMethod' => 'PATCH',
               'parameters' => array(
                 'customerId' => array(
@@ -1371,7 +1560,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'update' => array(
-              'path' => 'customer/{customerId}/schemas/{schemaKey}',
+              'path' => 'admin/directory/v1/customer/{customerId}/schemas/{schemaKey}',
               'httpMethod' => 'PUT',
               'parameters' => array(
                 'customerId' => array(
@@ -1396,7 +1585,7 @@ class Google_Service_Directory extends Google_Service
         array(
           'methods' => array(
             'delete' => array(
-              'path' => 'users/{userKey}/tokens/{clientId}',
+              'path' => 'admin/directory/v1/users/{userKey}/tokens/{clientId}',
               'httpMethod' => 'DELETE',
               'parameters' => array(
                 'userKey' => array(
@@ -1411,7 +1600,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'get' => array(
-              'path' => 'users/{userKey}/tokens/{clientId}',
+              'path' => 'admin/directory/v1/users/{userKey}/tokens/{clientId}',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'userKey' => array(
@@ -1426,8 +1615,28 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'list' => array(
-              'path' => 'users/{userKey}/tokens',
+              'path' => 'admin/directory/v1/users/{userKey}/tokens',
               'httpMethod' => 'GET',
+              'parameters' => array(
+                'userKey' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->twoStepVerification = new Google_Service_Directory_Resource_TwoStepVerification(
+        $this,
+        $this->serviceName,
+        'twoStepVerification',
+        array(
+          'methods' => array(
+            'turnOff' => array(
+              'path' => 'admin/directory/v1/users/{userKey}/twoStepVerification/turnOff',
+              'httpMethod' => 'POST',
               'parameters' => array(
                 'userKey' => array(
                   'location' => 'path',
@@ -1446,7 +1655,7 @@ class Google_Service_Directory extends Google_Service
         array(
           'methods' => array(
             'delete' => array(
-              'path' => 'users/{userKey}',
+              'path' => 'admin/directory/v1/users/{userKey}',
               'httpMethod' => 'DELETE',
               'parameters' => array(
                 'userKey' => array(
@@ -1456,13 +1665,17 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'get' => array(
-              'path' => 'users/{userKey}',
+              'path' => 'admin/directory/v1/users/{userKey}',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'userKey' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
+                ),
+                'viewType' => array(
+                  'location' => 'query',
+                  'type' => 'string',
                 ),
                 'customFieldMask' => array(
                   'location' => 'query',
@@ -1472,32 +1685,40 @@ class Google_Service_Directory extends Google_Service
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'viewType' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
               ),
             ),'insert' => array(
-              'path' => 'users',
+              'path' => 'admin/directory/v1/users',
               'httpMethod' => 'POST',
               'parameters' => array(),
             ),'list' => array(
-              'path' => 'users',
+              'path' => 'admin/directory/v1/users',
               'httpMethod' => 'GET',
               'parameters' => array(
+                'sortOrder' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'query' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'projection' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
                 'customFieldMask' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
+                'viewType' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'showDeleted' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
                 'customer' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'domain' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'event' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -1509,33 +1730,17 @@ class Google_Service_Directory extends Google_Service
                   'location' => 'query',
                   'type' => 'string',
                 ),
+                'domain' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
                 'pageToken' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'projection' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'query' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'showDeleted' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'sortOrder' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'viewType' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
               ),
             ),'makeAdmin' => array(
-              'path' => 'users/{userKey}/makeAdmin',
+              'path' => 'admin/directory/v1/users/{userKey}/makeAdmin',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'userKey' => array(
@@ -1545,7 +1750,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'patch' => array(
-              'path' => 'users/{userKey}',
+              'path' => 'admin/directory/v1/users/{userKey}',
               'httpMethod' => 'PATCH',
               'parameters' => array(
                 'userKey' => array(
@@ -1554,8 +1759,18 @@ class Google_Service_Directory extends Google_Service
                   'required' => true,
                 ),
               ),
+            ),'signOut' => array(
+              'path' => 'admin/directory/v1/users/{userKey}/signOut',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'userKey' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
             ),'undelete' => array(
-              'path' => 'users/{userKey}/undelete',
+              'path' => 'admin/directory/v1/users/{userKey}/undelete',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'userKey' => array(
@@ -1565,7 +1780,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'update' => array(
-              'path' => 'users/{userKey}',
+              'path' => 'admin/directory/v1/users/{userKey}',
               'httpMethod' => 'PUT',
               'parameters' => array(
                 'userKey' => array(
@@ -1575,22 +1790,22 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'watch' => array(
-              'path' => 'users/watch',
+              'path' => 'admin/directory/v1/users/watch',
               'httpMethod' => 'POST',
               'parameters' => array(
-                'customFieldMask' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'customer' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'domain' => array(
+                'viewType' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
                 'event' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'projection' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'customFieldMask' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -1602,15 +1817,19 @@ class Google_Service_Directory extends Google_Service
                   'location' => 'query',
                   'type' => 'string',
                 ),
+                'sortOrder' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'domain' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'customer' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
                 'pageToken' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'projection' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'query' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -1618,11 +1837,7 @@ class Google_Service_Directory extends Google_Service
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'sortOrder' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'viewType' => array(
+                'query' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -1638,7 +1853,7 @@ class Google_Service_Directory extends Google_Service
         array(
           'methods' => array(
             'delete' => array(
-              'path' => 'users/{userKey}/aliases/{alias}',
+              'path' => 'admin/directory/v1/users/{userKey}/aliases/{alias}',
               'httpMethod' => 'DELETE',
               'parameters' => array(
                 'userKey' => array(
@@ -1653,7 +1868,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'insert' => array(
-              'path' => 'users/{userKey}/aliases',
+              'path' => 'admin/directory/v1/users/{userKey}/aliases',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'userKey' => array(
@@ -1663,7 +1878,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'list' => array(
-              'path' => 'users/{userKey}/aliases',
+              'path' => 'admin/directory/v1/users/{userKey}/aliases',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'userKey' => array(
@@ -1671,13 +1886,9 @@ class Google_Service_Directory extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'event' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
               ),
             ),'watch' => array(
-              'path' => 'users/{userKey}/aliases/watch',
+              'path' => 'admin/directory/v1/users/{userKey}/aliases/watch',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'userKey' => array(
@@ -1701,7 +1912,7 @@ class Google_Service_Directory extends Google_Service
         array(
           'methods' => array(
             'delete' => array(
-              'path' => 'users/{userKey}/photos/thumbnail',
+              'path' => 'admin/directory/v1/users/{userKey}/photos/thumbnail',
               'httpMethod' => 'DELETE',
               'parameters' => array(
                 'userKey' => array(
@@ -1711,7 +1922,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'get' => array(
-              'path' => 'users/{userKey}/photos/thumbnail',
+              'path' => 'admin/directory/v1/users/{userKey}/photos/thumbnail',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'userKey' => array(
@@ -1721,7 +1932,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'patch' => array(
-              'path' => 'users/{userKey}/photos/thumbnail',
+              'path' => 'admin/directory/v1/users/{userKey}/photos/thumbnail',
               'httpMethod' => 'PATCH',
               'parameters' => array(
                 'userKey' => array(
@@ -1731,7 +1942,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'update' => array(
-              'path' => 'users/{userKey}/photos/thumbnail',
+              'path' => 'admin/directory/v1/users/{userKey}/photos/thumbnail',
               'httpMethod' => 'PUT',
               'parameters' => array(
                 'userKey' => array(
@@ -1751,7 +1962,7 @@ class Google_Service_Directory extends Google_Service
         array(
           'methods' => array(
             'generate' => array(
-              'path' => 'users/{userKey}/verificationCodes/generate',
+              'path' => 'admin/directory/v1/users/{userKey}/verificationCodes/generate',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'userKey' => array(
@@ -1761,7 +1972,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'invalidate' => array(
-              'path' => 'users/{userKey}/verificationCodes/invalidate',
+              'path' => 'admin/directory/v1/users/{userKey}/verificationCodes/invalidate',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'userKey' => array(
@@ -1771,7 +1982,7 @@ class Google_Service_Directory extends Google_Service
                 ),
               ),
             ),'list' => array(
-              'path' => 'users/{userKey}/verificationCodes',
+              'path' => 'admin/directory/v1/users/{userKey}/verificationCodes',
               'httpMethod' => 'GET',
               'parameters' => array(
                 'userKey' => array(

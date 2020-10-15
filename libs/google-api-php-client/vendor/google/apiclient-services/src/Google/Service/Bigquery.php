@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016 Google Inc.
+ * Copyright 2014 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -36,6 +36,9 @@ class Google_Service_Bigquery extends Google_Service
   /** Insert data into Google BigQuery. */
   const BIGQUERY_INSERTDATA =
       "https://www.googleapis.com/auth/bigquery.insertdata";
+  /** View your data in Google BigQuery. */
+  const BIGQUERY_READONLY =
+      "https://www.googleapis.com/auth/bigquery.readonly";
   /** View and manage your data across Google Cloud Platform services. */
   const CLOUD_PLATFORM =
       "https://www.googleapis.com/auth/cloud-platform";
@@ -54,20 +57,24 @@ class Google_Service_Bigquery extends Google_Service
 
   public $datasets;
   public $jobs;
+  public $models;
   public $projects;
+  public $routines;
   public $tabledata;
   public $tables;
   
   /**
    * Constructs the internal representation of the Bigquery service.
    *
-   * @param Google_Client $client
+   * @param Google_Client $client The client used to deliver requests.
+   * @param string $rootUrl The root URL used for requests to the service.
    */
-  public function __construct(Google_Client $client)
+  public function __construct(Google_Client $client, $rootUrl = null)
   {
     parent::__construct($client);
-    $this->rootUrl = 'https://www.googleapis.com/';
+    $this->rootUrl = $rootUrl ?: 'https://bigquery.googleapis.com/';
     $this->servicePath = 'bigquery/v2/';
+    $this->batchPath = 'batch/bigquery/v2';
     $this->version = 'v2';
     $this->serviceName = 'bigquery';
 
@@ -130,17 +137,17 @@ class Google_Service_Bigquery extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'all' => array(
+                'maxResults' => array(
                   'location' => 'query',
-                  'type' => 'boolean',
+                  'type' => 'integer',
                 ),
                 'filter' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'maxResults' => array(
+                'all' => array(
                   'location' => 'query',
-                  'type' => 'integer',
+                  'type' => 'boolean',
                 ),
                 'pageToken' => array(
                   'location' => 'query',
@@ -201,6 +208,10 @@ class Google_Service_Bigquery extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
+                'location' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
               ),
             ),'get' => array(
               'path' => 'projects/{projectId}/jobs/{jobId}',
@@ -215,6 +226,10 @@ class Google_Service_Bigquery extends Google_Service
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
+                ),
+                'location' => array(
+                  'location' => 'query',
+                  'type' => 'string',
                 ),
               ),
             ),'getQueryResults' => array(
@@ -231,6 +246,14 @@ class Google_Service_Bigquery extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
+                'location' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'timeoutMs' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
                 'maxResults' => array(
                   'location' => 'query',
                   'type' => 'integer',
@@ -242,10 +265,6 @@ class Google_Service_Bigquery extends Google_Service
                 'startIndex' => array(
                   'location' => 'query',
                   'type' => 'string',
-                ),
-                'timeoutMs' => array(
-                  'location' => 'query',
-                  'type' => 'integer',
                 ),
               ),
             ),'insert' => array(
@@ -267,15 +286,23 @@ class Google_Service_Bigquery extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'allUsers' => array(
+                'maxCreationTime' => array(
                   'location' => 'query',
-                  'type' => 'boolean',
+                  'type' => 'string',
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
                 ),
                 'maxResults' => array(
                   'location' => 'query',
                   'type' => 'integer',
                 ),
-                'pageToken' => array(
+                'allUsers' => array(
+                  'location' => 'query',
+                  'type' => 'boolean',
+                ),
+                'minCreationTime' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -287,6 +314,10 @@ class Google_Service_Bigquery extends Google_Service
                   'location' => 'query',
                   'type' => 'string',
                   'repeated' => true,
+                ),
+                'parentJobId' => array(
+                  'location' => 'query',
+                  'type' => 'string',
                 ),
               ),
             ),'query' => array(
@@ -303,16 +334,66 @@ class Google_Service_Bigquery extends Google_Service
           )
         )
     );
-    $this->projects = new Google_Service_Bigquery_Resource_Projects(
+    $this->models = new Google_Service_Bigquery_Resource_Models(
         $this,
         $this->serviceName,
-        'projects',
+        'models',
         array(
           'methods' => array(
-            'list' => array(
-              'path' => 'projects',
+            'delete' => array(
+              'path' => 'projects/{+projectId}/datasets/{+datasetId}/models/{+modelId}',
+              'httpMethod' => 'DELETE',
+              'parameters' => array(
+                'projectId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'datasetId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'modelId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'get' => array(
+              'path' => 'projects/{+projectId}/datasets/{+datasetId}/models/{+modelId}',
               'httpMethod' => 'GET',
               'parameters' => array(
+                'projectId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'datasetId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'modelId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'list' => array(
+              'path' => 'projects/{+projectId}/datasets/{+datasetId}/models',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'projectId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'datasetId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
                 'maxResults' => array(
                   'location' => 'query',
                   'type' => 'integer',
@@ -320,6 +401,179 @@ class Google_Service_Bigquery extends Google_Service
                 'pageToken' => array(
                   'location' => 'query',
                   'type' => 'string',
+                ),
+              ),
+            ),'patch' => array(
+              'path' => 'projects/{+projectId}/datasets/{+datasetId}/models/{+modelId}',
+              'httpMethod' => 'PATCH',
+              'parameters' => array(
+                'projectId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'datasetId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'modelId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->projects = new Google_Service_Bigquery_Resource_Projects(
+        $this,
+        $this->serviceName,
+        'projects',
+        array(
+          'methods' => array(
+            'getServiceAccount' => array(
+              'path' => 'projects/{projectId}/serviceAccount',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'projectId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'list' => array(
+              'path' => 'projects',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'maxResults' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->routines = new Google_Service_Bigquery_Resource_Routines(
+        $this,
+        $this->serviceName,
+        'routines',
+        array(
+          'methods' => array(
+            'delete' => array(
+              'path' => 'projects/{+projectId}/datasets/{+datasetId}/routines/{+routineId}',
+              'httpMethod' => 'DELETE',
+              'parameters' => array(
+                'projectId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'datasetId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'routineId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'get' => array(
+              'path' => 'projects/{+projectId}/datasets/{+datasetId}/routines/{+routineId}',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'projectId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'datasetId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'routineId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'readMask' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),'insert' => array(
+              'path' => 'projects/{+projectId}/datasets/{+datasetId}/routines',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'projectId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'datasetId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'list' => array(
+              'path' => 'projects/{+projectId}/datasets/{+datasetId}/routines',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'projectId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'datasetId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'maxResults' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+                'filter' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'readMask' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),'update' => array(
+              'path' => 'projects/{+projectId}/datasets/{+datasetId}/routines/{+routineId}',
+              'httpMethod' => 'PUT',
+              'parameters' => array(
+                'projectId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'datasetId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'routineId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
                 ),
               ),
             ),
@@ -371,15 +625,19 @@ class Google_Service_Bigquery extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
+                'startIndex' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'selectedFields' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
                 'maxResults' => array(
                   'location' => 'query',
                   'type' => 'integer',
                 ),
                 'pageToken' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'startIndex' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -433,6 +691,20 @@ class Google_Service_Bigquery extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
+                'selectedFields' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),'getIamPolicy' => array(
+              'path' => '{+resource}:getIamPolicy',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'resource' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
               ),
             ),'insert' => array(
               'path' => 'projects/{projectId}/datasets/{datasetId}/tables',
@@ -463,13 +735,13 @@ class Google_Service_Bigquery extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'maxResults' => array(
-                  'location' => 'query',
-                  'type' => 'integer',
-                ),
                 'pageToken' => array(
                   'location' => 'query',
                   'type' => 'string',
+                ),
+                'maxResults' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
                 ),
               ),
             ),'patch' => array(
@@ -487,6 +759,26 @@ class Google_Service_Bigquery extends Google_Service
                   'required' => true,
                 ),
                 'tableId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'setIamPolicy' => array(
+              'path' => '{+resource}:setIamPolicy',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'resource' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'testIamPermissions' => array(
+              'path' => '{+resource}:testIamPermissions',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'resource' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,

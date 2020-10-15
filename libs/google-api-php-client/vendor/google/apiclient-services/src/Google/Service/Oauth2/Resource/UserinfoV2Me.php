@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016 Google Inc.
+ * Copyright 2014 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -29,12 +29,12 @@ class Google_Service_Oauth2_Resource_UserinfoV2Me extends Google_Service_Resourc
    * (me.get)
    *
    * @param array $optParams Optional parameters.
-   * @return Google_Service_Oauth2_Userinfoplus
+   * @return Google_Service_Oauth2_Userinfo
    */
   public function get($optParams = array())
   {
     $params = array();
     $params = array_merge($params, $optParams);
-    return $this->call('get', array($params), "Google_Service_Oauth2_Userinfoplus");
+    return $this->call('get', array($params), "Google_Service_Oauth2_Userinfo");
   }
 }

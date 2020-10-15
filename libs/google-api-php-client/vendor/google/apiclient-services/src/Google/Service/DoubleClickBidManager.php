@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016 Google Inc.
+ * Copyright 2014 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,10 +16,11 @@
  */
 
 /**
- * Service definition for DoubleClickBidManager (v1).
+ * Service definition for DoubleClickBidManager (v1.1).
  *
  * <p>
- * API for viewing and managing your reports in DoubleClick Bid Manager.</p>
+ * DoubleClick Bid Manager API allows users to manage and create campaigns and
+ * reports.</p>
  *
  * <p>
  * For more information about this service, see the API
@@ -30,7 +31,9 @@
  */
 class Google_Service_DoubleClickBidManager extends Google_Service
 {
-
+  /** View and manage your reports in DoubleClick Bid Manager. */
+  const DOUBLECLICKBIDMANAGER =
+      "https://www.googleapis.com/auth/doubleclickbidmanager";
 
   public $lineitems;
   public $queries;
@@ -41,14 +44,16 @@ class Google_Service_DoubleClickBidManager extends Google_Service
    * Constructs the internal representation of the DoubleClickBidManager
    * service.
    *
-   * @param Google_Client $client
+   * @param Google_Client $client The client used to deliver requests.
+   * @param string $rootUrl The root URL used for requests to the service.
    */
-  public function __construct(Google_Client $client)
+  public function __construct(Google_Client $client, $rootUrl = null)
   {
     parent::__construct($client);
-    $this->rootUrl = 'https://www.googleapis.com/';
-    $this->servicePath = 'doubleclickbidmanager/v1/';
-    $this->version = 'v1';
+    $this->rootUrl = $rootUrl ?: 'https://doubleclickbidmanager.googleapis.com/';
+    $this->servicePath = 'doubleclickbidmanager/v1.1/';
+    $this->batchPath = 'batch';
+    $this->version = 'v1.1';
     $this->serviceName = 'doubleclickbidmanager';
 
     $this->lineitems = new Google_Service_DoubleClickBidManager_Resource_Lineitems(
@@ -78,7 +83,12 @@ class Google_Service_DoubleClickBidManager extends Google_Service
             'createquery' => array(
               'path' => 'query',
               'httpMethod' => 'POST',
-              'parameters' => array(),
+              'parameters' => array(
+                'asynchronous' => array(
+                  'location' => 'query',
+                  'type' => 'boolean',
+                ),
+              ),
             ),'deletequery' => array(
               'path' => 'query/{queryId}',
               'httpMethod' => 'DELETE',
@@ -102,7 +112,16 @@ class Google_Service_DoubleClickBidManager extends Google_Service
             ),'listqueries' => array(
               'path' => 'queries',
               'httpMethod' => 'GET',
-              'parameters' => array(),
+              'parameters' => array(
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
             ),'runquery' => array(
               'path' => 'query/{queryId}',
               'httpMethod' => 'POST',
@@ -111,6 +130,10 @@ class Google_Service_DoubleClickBidManager extends Google_Service
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
+                ),
+                'asynchronous' => array(
+                  'location' => 'query',
+                  'type' => 'boolean',
                 ),
               ),
             ),
@@ -131,6 +154,14 @@ class Google_Service_DoubleClickBidManager extends Google_Service
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
                 ),
               ),
             ),
