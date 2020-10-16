@@ -50,6 +50,23 @@ class WebMasterController extends GoogleAPIController
     }
 
     /*
+     */
+    function crawlLog($ret, $siteUrl){
+        $crawlLogCtrl = new CrawlLogController();
+        $crawlInfo = [];
+        $crawlInfo['crawl_type'] = 'gs_webmaster';
+        $crawlInfo['crawl_status'] = $ret['status'] ? 1 : 0;
+        $crawlInfo['ref_id'] = $crawlInfo['crawl_link'] = addslashes($siteUrl);
+        //$crawlInfo['crawl_referer'] = addslashes($this-> _CURLOPT_REFERER);
+        //$crawlInfo['crawl_cookie'] = addslashes($this -> _CURLOPT_COOKIE);
+        //$crawlInfo['crawl_post_fields'] = addslashes($this -> _CURLOPT_POSTFIELDS);
+        //$crawlInfo['crawl_useragent'] = addslashes($this->_CURLOPT_USERAGENT);
+        //$crawlInfo['proxy_id'] = intval($proxyInfo['id']);
+        $crawlInfo['log_message'] = addslashes($ret['msg']);
+        $ret['log_id'] = $crawlLogCtrl->createCrawlLog($crawlInfo);
+    }
+
+    /*
      * function to get webmaster tool query search result
      */
     function getQueryResults($userId, $siteUrl, $paramList, $limit = false)
@@ -104,6 +121,8 @@ class WebMasterController extends GoogleAPIController
             $err = $e->getMessage();
             $result['msg'] = "Error: search query analytics - $err";
         }
+
+        $this->crawlLog($result, $siteUrl);
 
         return $result;
 
@@ -262,7 +281,7 @@ class WebMasterController extends GoogleAPIController
         $keywordId = 0;
         $dataList = array(
             'website_id|int' => $websiteId,
-            'name' => $keywordName,
+            'name' => mb_substr($keywordName, 0, 300, "utf-8"),
             'status' => 1,
         );
 

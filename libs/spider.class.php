@@ -515,7 +515,7 @@ class Spider{
 	// function to check whether link is a redirect
 	public static function isLinkRedirect($url) {
 			$followRedirects = false; //don't follow with cURL as we need that info.
-			$header = $this->getHeader($url, $followRedirects);
+			$header = Spider::getHeader($url, $followRedirects);
 			if (stristr($header, '301 Moved Permanently') || stristr($header, '308 Permanent Redirect')) {
 					return true;
 			} else {
